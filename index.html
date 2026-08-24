@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Authorization-aware Wi-Fi security assessment lab by DrConfluence.">
+  <title>Wi-Fi Security Assessment Lab | DrConfluence</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+
+<header class="nav">
+  <a class="brand" href="./">
+    DrConfluence<span>/security</span>
+  </a>
+
+  <nav>
+    <a href="#capabilities">Capabilities</a>
+    <a href="#methodology">Methodology</a>
+    <a href="#evidence">Evidence</a>
+    <a href="assessment-report/">Case Study</a>
+  </nav>
+</header>
+
+<main>
+
+<section class="hero">
+
+  <p class="eyebrow">
+    WIRELESS SECURITY • TERMUX • DEFENSIVE ASSESSMENT
+  </p>
+
+  <h1>
+    Wi-Fi Security<br>
+    <span>Assessment Lab</span>
+  </h1>
+
+  <p class="lead">
+    An authorization-aware passive assessment workflow
+    for controlled real-world security exercises.
+  </p>
+
+  <div class="actions">
+    <a class="button"
+       href="https://github.com/DrConfluence/wifi-security-audit-lab">
+       View GitHub
+    </a>
+
+    <a class="button secondary"
+       href="assessment-report/">
+       View Case Study
+    </a>
+  </div>
+
+  <div class="notice">
+    <strong>Authorization boundary:</strong>
+    Network visibility is not authorization.
+    Only explicitly approved networks are treated as in-scope.
+  </div>
+
+</section>
+
+
+<section id="capabilities">
+
+  <p class="eyebrow">CAPABILITIES</p>
+
+  <h2>What the lab demonstrates</h2>
+
+  <div class="grid">
+
+    <article>
+      <b>Passive discovery</b>
+      <p>
+        Collects Wi-Fi metadata through Termux:API
+        without attempting authentication.
+      </p>
+    </article>
+
+    <article>
+      <b>Security classification</b>
+      <p>
+        Classifies observed capabilities as WPA3,
+        WPA2, WPA, WEP, OPEN, or UNKNOWN.
+      </p>
+    </article>
+
+    <article>
+      <b>Authorization matching</b>
+      <p>
+        Separates observed networks from the
+        operator-maintained authorized scope.
+      </p>
+    </article>
+
+    <article>
+      <b>Evidence preservation</b>
+      <p>
+        Produces structured CSV and JSON records
+        with scan IDs and timestamps.
+      </p>
+    </article>
+
+    <article>
+      <b>Automated validation</b>
+      <p>
+        Regression tests protect assessment logic
+        against accidental changes.
+      </p>
+    </article>
+
+    <article>
+      <b>Operational discipline</b>
+      <p>
+        Real observations and authorization records
+        are excluded from the public repository.
+      </p>
+    </article>
+
+  </div>
+
+</section>
+
+
+<section id="methodology" class="dark">
+
+  <p class="eyebrow">WORKFLOW</p>
+
+  <h2>Assessment methodology</h2>
+
+  <div class="flow">
+    <span>AUTHORIZATION</span>
+    <i>→</i>
+
+    <span>SCOPE</span>
+    <i>→</i>
+
+    <span>DISCOVERY</span>
+    <i>→</i>
+
+    <span>CLASSIFY</span>
+    <i>→</i>
+
+    <span>VERIFY</span>
+    <i>→</i>
+
+    <span>EVIDENCE</span>
+    <i>→</i>
+
+    <span>REPORT</span>
+  </div>
+
+  <p class="muted">
+    The workflow intentionally stops at the authorization boundary.
+    Active testing is performed only when the written scope explicitly
+    permits it.
+  </p>
+
+</section>
+
+
+<section id="evidence">
+
+  <p class="eyebrow">ENGINEERING EVIDENCE</p>
+
+  <h2>Current validation</h2>
+
+  <div class="metrics">
+
+    <div>
+      <strong>12</strong>
+      <span>automated tests passing</span>
+    </div>
+
+    <div>
+      <strong>2</strong>
+      <span>structured evidence formats</span>
+    </div>
+
+    <div>
+      <strong>2.4 / 5</strong>
+      <span>GHz classification</span>
+    </div>
+
+    <div>
+      <strong>0</strong>
+      <span>credential attacks</span>
+    </div>
+
+  </div>
+
+  <p>
+    Validation commands:
+  </p>
+
+  <pre><code>python -m pytest -q
+bash -n wifi_scan.sh
+python -m py_compile wifi_scan.py</code></pre>
+
+</section>
+
+
+<section>
+
+  <p class="eyebrow">REAL-WORLD STANDARD</p>
+
+  <h2>Safe operation is part of the skill</h2>
+
+  <p class="lead">
+    A strong assessment is not measured by how many networks can be
+    marked "authorized." It is measured by whether the assessor can
+    establish scope, preserve evidence, recognize boundaries, and stop
+    when authorization does not exist.
+  </p>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  <span>
+    DrConfluence • Wi-Fi Security Assessment Lab
+  </span>
+
+  <a href="https://github.com/DrConfluence">
+    GitHub
+  </a>
+
+</footer>
+
+</body>
+</html>
