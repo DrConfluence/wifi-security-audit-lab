@@ -22,7 +22,7 @@ python wifi_scan.py
 Or use:
 
 ```bash
-/wiki-scan.sh
+./wifi_scan.sh
 ```
 
 ## Testing
