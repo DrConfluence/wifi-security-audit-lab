@@ -1,0 +1,3 @@
+ssid,bssid,authorization_ref,scope
+LAB-NETWORK,02:00:00:00:00:01,EXAMPLE-001,Controlled laboratory assessment
+LAB-GUEST,02:00:00:00:00:02,EXAMPLE-001,Controlled laboratory assessment

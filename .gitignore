@@ -1,0 +1,16 @@
+# Real Wi-Fi observations
+networks_log.csv
+networks_log.json
+first_scan.json
+networks_log.v1.csv
+networks_log.v1.json
+
+# Real authorization scope
+authorized_networks.csv
+
+# Python
+__pycache__/
+.pytest_cache/
+*.pyc
+
+authorized_networks.txt
