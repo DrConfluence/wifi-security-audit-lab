@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import json
-from datetime import datetime, timezone
 from pathlib import Path
 
 from assessment.engine import run_assessment
@@ -10,11 +8,6 @@ from assessment.findings import generate_findings
 from assessment.executive import build_executive_summary
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-RUN_DIR = BASE_DIR / "evidence"
-
-
-def now():
-    return datetime.now(timezone.utc).isoformat()
 
 
 def run_end_to_end(
@@ -22,24 +15,26 @@ def run_end_to_end(
     bssid=None,
     authorization_ref=None,
     phase2_host=None,
+    phase2_ports=(53, 80, 443),
 ):
-    started = now()
-
     result = run_assessment(
         ssid=ssid,
         bssid=bssid,
         authorization_ref=authorization_ref,
-        phase2_host=phase2_host,
     )
 
     session = result["session"]
-    connectivity = result["connectivity"]
-    services = result["services"]
+    connectivity = result.get("connectivity", {})
 
-    findings = generate_findings(
-        connectivity,
-        services,
-    )
+    services = []
+
+    if phase2_host:
+        from assessment.services import assess_authorized_services
+
+        services = assess_authorized_services(
+            phase2_host,
+            ports=phase2_ports,
+        )
 
     report = build_report(
         session=session,
@@ -47,26 +42,39 @@ def run_end_to_end(
         services=services,
     )
 
+    findings = generate_findings(
+        connectivity,
+        services,
+    )
+
     report["findings"] = findings
-
-report["executive"] = build_executive_summary(report)
-
-    report["workflow"] = {
-        "started_at": started,
-        "completed_at": now(),
-        "phase_1": "COMPLETE",
-        "phase_2": "COMPLETE" if phase2_host else "NOT_RUN",
-    }
+    report["executive"] = build_executive_summary(report)
 
     report_path = write_report(report)
 
     summary = {
         "assessment_id": session["assessment_id"],
-        "ssid": session["ssid"],
-        "authorization_ref": session["authorization_ref"],
-        "connection_state": connectivity["connection_state"],
-        "gateway": connectivity["gateway"],
-        "gateway_status": connectivity["gateway_test"]["status"],
+        "ssid": session.get("ssid"),
+        "bssid": session.get("bssid"),
+        "authorization_ref": session.get(
+            "authorization_ref"
+        ),
+        "scope_status": session.get(
+            "scope_status"
+        ),
+        "connection_state": connectivity.get(
+            "connection_state",
+            "NOT_AVAILABLE",
+        ),
+        "gateway": connectivity.get(
+            "gateway"
+        ),
+        "gateway_status": connectivity.get(
+            "gateway_test", {}
+        ).get(
+            "status",
+            "NOT_AVAILABLE",
+        ),
         "services_tested": len(services),
         "services_reachable": sum(
             1
@@ -74,22 +82,37 @@ report["executive"] = build_executive_summary(report)
             if item.get("status") == "PASS"
         ),
         "findings": len(findings),
-        "report": str(report_path),
+        "overall_status": report[
+            "executive"
+        ]["overall_status"],
+        "report_path": str(report_path),
     }
 
-    RUN_DIR.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
-
-    summary_path = (
-        RUN_DIR
-        / f"{session['assessment_id']}_summary.json"
-    )
-
-    summary_path.write_text(
-        json.dumps(summary, indent=2),
-        encoding="utf-8",
-    )
-
-    return summary
+    return {
+        "assessment_id": session["assessment_id"],
+        "ssid": session.get("ssid"),
+        "authorization_ref": session.get(
+            "authorization_ref"
+        ),
+        "connection_state": connectivity.get(
+            "connection_state",
+            "NOT_AVAILABLE",
+        ),
+        "gateway": connectivity.get(
+            "gateway"
+        ),
+        "gateway_status": connectivity.get(
+            "gateway_test", {}
+        ).get(
+            "status",
+            "NOT_AVAILABLE",
+        ),
+        "services_tested": len(services),
+        "services_reachable": summary[
+            "services_reachable"
+        ],
+        "findings": findings,
+        "executive": report["executive"],
+        "report": report,
+        "report_path": str(report_path),
+    }
