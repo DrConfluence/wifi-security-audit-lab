@@ -309,22 +309,158 @@ Authorized assessment only. Wireless visibility is not authorization.
 </footer>
 </main>
 
+
+<section id="phase67" style="margin:28px 0;border:1px solid #263238;background:#050807;color:#c8e8d0;font-family:monospace">
+<style>
+#phase67 .p67-head{padding:18px;border-bottom:1px solid #263238}
+#phase67 .p67-prompt{color:#55ff88;font-size:12px}
+#phase67 h2{margin:7px 0;color:#d9ffe5}
+#phase67 .p67-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px}
+#phase67 .p67-card{border:1px solid #1d3325;background:#08100b;padding:14px}
+#phase67 .p67-label{font-size:10px;color:#6c8f78;text-transform:uppercase}
+#phase67 .p67-value{font-size:20px;color:#b9ffca;margin-top:8px}
+#phase67 .p67-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 14px}
+#phase67 button{font:12px monospace;background:#0a150d;color:#7dff9e;border:1px solid #274b32;padding:8px 12px;cursor:pointer}
+#phase67 .p67-panel{display:none;padding:14px}
+#phase67 .p67-panel.active{display:block}
+#phase67 table{width:100%;border-collapse:collapse;font-size:12px}
+#phase67 th,#phase67 td{text-align:left;padding:9px;border-bottom:1px solid #17251b}
+#phase67 th{color:#6c8f78}
+#phase67 .ok{color:#55ff88}
+#phase67 .warn{color:#ffd166}
+@media(max-width:700px){#phase67 .p67-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:450px){#phase67 .p67-grid{grid-template-columns:1fr}}
+</style>
+
+<div class="p67-head">
+<div class="p67-prompt">root@wifi-audit:~/wifi-audit# ./phase6 --dashboard</div>
+<h2>PHASE 06 // NETWORK VISIBILITY</h2>
+<div class="p67-prompt" id="p67status">[ BOOT ] loading evidence...</div>
+</div>
+
+<div class="p67-grid">
+<div class="p67-card"><div class="p67-label">Assessment</div><div class="p67-value" id="p67assessment">LAB-001</div></div>
+<div class="p67-card"><div class="p67-label">Hosts</div><div class="p67-value" id="p67hosts">—</div></div>
+<div class="p67-card"><div class="p67-label">Services</div><div class="p67-value" id="p67services">—</div></div>
+<div class="p67-card"><div class="p67-label">APs observed</div><div class="p67-value" id="p67aps">—</div></div>
+</div>
+
+<div class="p67-tabs">
+<button onclick="p67Tab('overview')">01 overview</button>
+<button onclick="p67Tab('assets')">02 assets</button>
+<button onclick="p67Tab('services')">03 services</button>
+<button onclick="p67Tab('wireless')">04 wireless</button>
+<button onclick="p67Tab('detections')">05 detections</button>
+<button onclick="p67Tab('boundary')">06 boundary</button>
+</div>
+
+<div id="p67-overview" class="p67-panel active">
+<div class="p67-grid">
+<div class="p67-card"><div class="p67-label">Network</div><div class="p67-value" id="p67network">—</div></div>
+<div class="p67-card"><div class="p67-label">Device IP</div><div class="p67-value" id="p67ip">—</div></div>
+<div class="p67-card"><div class="p67-label">RSSI</div><div class="p67-value" id="p67rssi">—</div></div>
+<div class="p67-card"><div class="p67-label">Generated</div><div class="p67-value" id="p67generated">—</div></div>
+</div>
+</div>
+
+<div id="p67-assets" class="p67-panel">
+<table><thead><tr><th>HOST</th><th>STATE</th><th>NAME</th></tr></thead><tbody id="p67assets"></tbody></table>
+</div>
+
+<div id="p67-services" class="p67-panel">
+<table><thead><tr><th>HOST</th><th>PORT</th><th>SERVICE</th><th>VERSION</th></tr></thead><tbody id="p67servicesTable"></tbody></table>
+</div>
+
+<div id="p67-wireless" class="p67-panel">
+<table><thead><tr><th>SSID</th><th>BSSID</th><th>RSSI</th><th>FREQ</th><th>SECURITY</th></tr></thead><tbody id="p67wireless"></tbody></table>
+</div>
+
+<div id="p67-detections" class="p67-panel">
+<table><thead><tr><th>SEVERITY</th><th>FINDING</th><th>DETAIL</th></tr></thead><tbody id="p67detections"></tbody></table>
+</div>
+
+<div id="p67-boundary" class="p67-panel">
+<table><thead><tr><th>CAPABILITY</th><th>STATE</th></tr></thead><tbody id="p67boundary"></tbody></table>
+</div>
+</section>
+
 <script>
 const commands=[
 "cd ~/wifi-audit && termux-wifi-connectioninfo | jq .",
 "cd ~/wifi-audit && termux-wifi-scaninfo | jq .",
+"cd ~/wifi-audit && python -m assessment.phase6",
 "cd ~/wifi-audit && python -m pytest -q",
 "cd ~/wifi-audit && ./wifi-authorized-lan.sh LAB-001"
 ];
+
+const esc=v=>String(v??"—").replace(/[&<>"]/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[x]));
+
+function p67Tab(name){
+ document.querySelectorAll("#phase67 .p67-panel").forEach(x=>x.classList.remove("active"));
+ document.getElementById("p67-"+name).classList.add("active");
+}
+
+function p67Rows(id,html){
+ document.getElementById(id).innerHTML=html||"<tr><td colspan='8'>NO DATA</td></tr>";
+}
+
+async function loadPhase6(){
+ try{
+  const response=await fetch("public-data/phase6_snapshot.json",{cache:"no-store"});
+  if(!response.ok) throw new Error(response.status);
+  const d=await response.json();
+  const n=d.network||{};
+  const a=d.assets||{};
+  const sv=d.services||{};
+  const w=d.wireless||{};
+
+  document.getElementById("p67assessment").textContent=d.assessment||"LAB-001";
+  document.getElementById("p67hosts").textContent=a.hosts_observed??0;
+  document.getElementById("p67services").textContent=sv.services_observed??0;
+  document.getElementById("p67aps").textContent=w.networks_observed??0;
+  document.getElementById("p67network").textContent=n.ssid||"NOT_CONNECTED";
+  document.getElementById("p67ip").textContent=n.device_ip||"0.0.0.0";
+  document.getElementById("p67rssi").textContent=n.rssi??"—";
+  document.getElementById("p67generated").textContent=d.generated_at||"—";
+  document.getElementById("p67status").textContent="[ OK ] phase6 evidence loaded";
+
+  p67Rows("p67assets",(a.hosts||[]).map(h=>{
+   const addr=(h.addresses||[]).find(x=>x.type==="ipv4");
+   return "<tr><td>"+esc(addr?.address)+"</td><td class='ok'>UP</td><td>"+esc((h.hostnames||[]).join(", "))+"</td></tr>";
+  }).join(""));
+
+  p67Rows("p67servicesTable",(sv.services||[]).map(x=>
+   "<tr><td>"+esc(x.ip)+"</td><td>"+esc(x.port)+"/"+esc(x.protocol)+"</td><td>"+esc(x.service)+"</td><td>"+esc([x.product,x.version].filter(Boolean).join(" "))+"</td></tr>"
+  ).join(""));
+
+  p67Rows("p67wireless",(w.networks||[]).map(x=>
+   "<tr><td>"+esc(x.ssid)+"</td><td>"+esc(x.bssid)+"</td><td>"+esc(x.rssi)+"</td><td>"+esc(x.frequency_mhz)+"</td><td>"+esc(x.security||x.capabilities)+"</td></tr>"
+  ).join(""));
+
+  p67Rows("p67detections",(d.detections||[]).map(x=>
+   "<tr><td class='"+(x.severity==="INFO"?"ok":"warn")+"'>"+esc(x.severity)+"</td><td>"+esc(x.title)+"</td><td>"+esc(x.detail)+"</td></tr>"
+  ).join(""));
+
+  p67Rows("p67boundary",Object.entries(d.capabilities||{}).map(([k,v])=>
+   "<tr><td>"+esc(k)+"</td><td>"+esc(v)+"</td></tr>"
+  ).join(""));
+
+ }catch(error){
+  document.getElementById("p67status").textContent="[ OFFLINE ] phase6 evidence unavailable";
+ }
+}
+
+loadPhase6();
+
 const box=document.getElementById("commands");
 commands.forEach((cmd,i)=>{
  const div=document.createElement("div");
  div.className="terminal";
  div.innerHTML='<div class="termbar">command '+(i+1)+'</div><div class="termout command"><code>'+cmd.replaceAll("&","&amp;").replaceAll("<","&lt;")+'</code><button>copy</button></div>';
  div.querySelector("button").onclick=async()=>{
-   await navigator.clipboard.writeText(cmd);
-   div.querySelector("button").textContent="copied";
-   setTimeout(()=>div.querySelector("button").textContent="copy",1200);
+  await navigator.clipboard.writeText(cmd);
+  div.querySelector("button").textContent="copied";
+  setTimeout(()=>div.querySelector("button").textContent="copy",1200);
  };
  box.appendChild(div);
 });

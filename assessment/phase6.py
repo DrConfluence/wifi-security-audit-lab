@@ -33,15 +33,15 @@ def services_from_xml():
                 service = port.find("service")
                 result.append({
                     "ip": ip,
-                    "port": int(port.get("port")),
+                    "port": int(port.get("portid")),
                     "protocol": port.get("protocol", "tcp"),
                     "state": state.get("state"),
                     "service": service.get("name") if service is not None else "unknown",
                     "product": service.get("product") if service is not None else None,
                     "version": service.get("version") if service is not None else None,
                 })
-    except Exception:
-        pass
+    except (ET.ParseError, OSError, ValueError) as exc:
+        print(f"WARNING: could not parse {p}: {exc}")
     return result
 
 connection = load_json("live_assessment.json", {}).get("connection", {}).get("data", {})

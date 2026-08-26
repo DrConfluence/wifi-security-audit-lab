@@ -1,0 +1,233 @@
+{
+  "schema": "wifi-audit.phase6.v1",
+  "generated_at": "2026-08-26T17:16:44.407230+00:00",
+  "assessment": "LAB-001",
+  "network": {
+    "ssid": "<unknown ssid>",
+    "rssi": -127,
+    "frequency_mhz": -1
+  },
+  "wireless": {
+    "networks_observed": 13,
+    "networks": [
+      {
+        "ssid": "Sandip107.",
+        "bssid": "f6:4c:ed:dc:84:c6",
+        "rssi": -98,
+        "frequency_mhz": 2462,
+        "band": "2.4 GHz",
+        "channel_bandwidth_mhz": "20",
+        "center_frequency_mhz": null,
+        "capabilities": "[WPA2-PSK-CCMP-128][RSN-PSK+SAE-CCMP-128][ESS][MFPC]",
+        "security": "WPA2/WPA3",
+        "wps_advertised": false,
+        "timestamp": 688605441040
+      },
+      {
+        "ssid": "182VISHALJIO5.0",
+        "bssid": "3e:f8:7e:5c:7d:8b",
+        "rssi": -91,
+        "frequency_mhz": 2462,
+        "band": "2.4 GHz",
+        "channel_bandwidth_mhz": "20",
+        "center_frequency_mhz": null,
+        "capabilities": "[WPA2-PSK-CCMP-128][RSN-PSK-CCMP-128][ESS][WPS]",
+        "security": "WPA2",
+        "wps_advertised": true,
+        "timestamp": 688605440997
+      },
+      {
+        "ssid": "DeshpandeVaibhav",
+        "bssid": "fe:bf:77:25:4d:3f",
+        "rssi": -98,
+        "frequency_mhz": 2462,
+        "band": "2.4 GHz",
+        "channel_bandwidth_mhz": "20",
+        "center_frequency_mhz": null,
+        "capabilities": "[WPA2-PSK-CCMP-128][RSN-PSK-CCMP-128][ESS][WPS]",
+        "security": "WPA2",
+        "wps_advertised": true,
+        "timestamp": 688577210954
+      },
+      {
+        "ssid": "Desai",
+        "bssid": "7e:b0:de:5a:92:e6",
+        "rssi": -98,
+        "frequency_mhz": 2462,
+        "band": "2.4 GHz",
+        "channel_bandwidth_mhz": "20",
+        "center_frequency_mhz": null,
+        "capabilities": "[WPA2-PSK-CCMP-128][RSN-PSK-CCMP-128][ESS][WPS]",
+        "security": "WPA2",
+        "wps_advertised": true,
+        "timestamp": 688605441024
+      },
+      {
+        "ssid": "LIVSMT-RO-FF64",
+        "bssid": "36:b7:da:e2:ff:64",
+        "rssi": -76,
+        "frequency_mhz": 2412,
+        "band": "2.4 GHz",
+        "channel_bandwidth_mhz": "40",
+        "center_frequency_mhz": 2422,
+        "capabilities": "[WPA2-PSK-CCMP-128+TKIP][RSN-PSK-CCMP-128+TKIP][WPA-PSK-CCMP-128+TKIP][ESS]",
+        "security": "WPA2",
+        "wps_advertised": false,
+        "timestamp": 688577210976
+      },
+      {
+        "ssid": "Airtel_akas_6001",
+        "bssid": "c4:9a:31:5e:8c:de",
+        "rssi": -96,
+        "frequency_mhz": 2432,
+        "band": "2.4 GHz",
+        "channel_bandwidth_mhz": "40",
+        "center_frequency_mhz": 2442,
+        "capabilities": "[WPA-PSK-TKIP+CCMP-128][WPA2-PSK-TKIP+CCMP-128][RSN-PSK-TKIP+CCMP-128][ESS]",
+        "security": "WPA2",
+        "wps_advertised": false,
+        "timestamp": 688605441048
+      },
+      {
+        "ssid": "JioAirfiberA6",
+        "bssid": "20:b5:c6:04:38:64",
+        "rssi": -96,
+        "frequency_mhz": 5500,
+        "band": "5 GHz",
+        "channel_bandwidth_mhz": "80",
+        "center_frequency_mhz": 5510,
+        "capabilities": "[WPA2-PSK-CCMP-128][RSN-PSK-CCMP-128][ESS]",
+        "security": "WPA2",
+        "wps_advertised": false,
+        "timestamp": 688577211022
+      },
+      {
+        "ssid": "OmkarChaitu",
+        "bssid": "84:d8:1b:75:45:06",
+        "rssi": -97,
+        "frequency_mhz": 2457,
+        "band": "2.4 GHz",
+        "channel_bandwidth_mhz": "40",
+        "center_frequency_mhz": 2447,
+        "capabilities": "[WPA2-PSK-TKIP+CCMP-128][RSN-PSK-TKIP+CCMP-128][ESS][WPS]",
+        "security": "WPA2",
+        "wps_advertised": true,
+        "timestamp": 688577210920
+      },
+      {
+        "ssid": "MV113961515",
+        "bssid": "bc:ad:ae:22:67:1d",
+        "rssi": -96,
+        "frequency_mhz": 2437,
+        "band": "2.4 GHz",
+        "channel_bandwidth_mhz": "20",
+        "center_frequency_mhz": null,
+        "capabilities": "[ESS]",
+        "security": "OPEN/UNSPECIFIED",
+        "wps_advertised": false,
+        "timestamp": 688577211007
+      },
+      {
+        "ssid": "Redmi 9 Power",
+        "bssid": "02:7b:e5:48:60:91",
+        "rssi": -92,
+        "frequency_mhz": 2412,
+        "band": "2.4 GHz",
+        "channel_bandwidth_mhz": "20",
+        "center_frequency_mhz": null,
+        "capabilities": "[WPA2-PSK-CCMP-128][RSN-PSK-CCMP-128][ESS]",
+        "security": "WPA2",
+        "wps_advertised": false,
+        "timestamp": 688577210993
+      },
+      {
+        "ssid": "W00_1875495768",
+        "bssid": "4c:01:14:c3:85:7f",
+        "rssi": -98,
+        "frequency_mhz": 2462,
+        "band": "2.4 GHz",
+        "channel_bandwidth_mhz": "20",
+        "center_frequency_mhz": null,
+        "capabilities": "[WPA2-PSK-CCMP-128][RSN-PSK-CCMP-128][WPA-PSK-TKIP][ESS]",
+        "security": "WPA2",
+        "wps_advertised": false,
+        "timestamp": 688605441057
+      },
+      {
+        "ssid": "RH-2.4G-DDF7D0",
+        "bssid": "44:95:3b:dd:f7:d0",
+        "rssi": -86,
+        "frequency_mhz": 2412,
+        "band": "2.4 GHz",
+        "channel_bandwidth_mhz": "40",
+        "center_frequency_mhz": 2422,
+        "capabilities": "[WPA-PSK-CCMP-128][WPA2-PSK-CCMP-128][RSN-PSK-CCMP-128][ESS][WPS]",
+        "security": "WPA2",
+        "wps_advertised": true,
+        "timestamp": 688605441031
+      },
+      {
+        "ssid": "MULTIPOINT@4.11",
+        "bssid": "78:9a:18:8f:50:42",
+        "rssi": -92,
+        "frequency_mhz": 5300,
+        "band": "5 GHz",
+        "channel_bandwidth_mhz": "40",
+        "center_frequency_mhz": 5310,
+        "capabilities": "[ESS]",
+        "security": "OPEN/UNSPECIFIED",
+        "wps_advertised": false,
+        "timestamp": 688577211014
+      }
+    ]
+  },
+  "assets": {
+    "hosts_observed": 2,
+    "hosts": [
+      {
+        "addresses": [
+          {
+            "address": "172.22.25.69",
+            "type": "ipv4"
+          }
+        ],
+        "hostnames": []
+      },
+      {
+        "addresses": [
+          {
+            "address": "172.22.25.133",
+            "type": "ipv4"
+          }
+        ],
+        "hostnames": []
+      }
+    ]
+  },
+  "services": {
+    "services_observed": 1,
+    "services": [
+      {
+        "ip": "172.22.25.133",
+        "port": 53,
+        "protocol": "tcp",
+        "state": "open",
+        "service": "domain",
+        "product": null,
+        "version": null
+      }
+    ]
+  },
+  "detections": [],
+  "capabilities": {
+    "asset_discovery": true,
+    "service_inventory": true,
+    "evidence_generation": true,
+    "traffic_metadata": "environment-dependent",
+    "packet_payload_capture": false,
+    "screen_capture": false,
+    "credential_interception": false
+  },
+  "network_status": "telemetry_unavailable",
+  "network_note": "Current Android Wi-Fi association telemetry was unavailable when the snapshot was generated; asset/service/wireless observations are retained from the assessment evidence."
+}
