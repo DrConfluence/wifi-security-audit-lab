@@ -408,6 +408,7 @@ async function loadPhase6(){
  try{
   const response=await fetch("public-data/phase6_snapshot.json",{cache:"no-store"});
   if(!response.ok) throw new Error(response.status);
+
   const d=await response.json();
   const n=d.network||{};
   const a=d.assets||{};
@@ -431,11 +432,14 @@ async function loadPhase6(){
     telemetryAvailable && n.device_ip ? n.device_ip : "—";
 
   document.getElementById("p67rssi").textContent =
-    telemetryAvailable && Number.isFinite(n.rssi) && n.rssi > -127
+    telemetryAvailable &&
+    Number.isFinite(n.rssi) &&
+    n.rssi > -127
       ? n.rssi + " dBm"
       : "—";
 
-  document.getElementById("p67generated").textContent=d.generated_at||"—";
+  document.getElementById("p67generated").textContent =
+    d.generated_at || "—";
 
   document.getElementById("p67status").textContent =
     telemetryAvailable
@@ -444,27 +448,64 @@ async function loadPhase6(){
 
   p67Rows("p67assets",(a.hosts||[]).map(h=>{
    const addr=(h.addresses||[]).find(x=>x.type==="ipv4");
-   return "<tr><td>"+esc(addr?.address)+"</td><td class='ok'>UP</td><td>"+esc((h.hostnames||[]).join(", "))+"</td></tr>";
+
+   return "<tr><td>"+
+     esc(addr?.address)+
+     "</td><td class='ok'>UP</td><td>"+
+     esc((h.hostnames||[]).join(", "))+
+     "</td></tr>";
   }).join(""));
 
   p67Rows("p67servicesTable",(sv.services||[]).map(x=>
-   "<tr><td>"+esc(x.ip)+"</td><td>"+esc(x.port)+"/"+esc(x.protocol)+"</td><td>"+esc(x.service)+"</td><td>"+esc([x.product,x.version].filter(Boolean).join(" "))+"</td></tr>"
+   "<tr><td>"+
+     esc(x.ip)+
+     "</td><td>"+
+     esc(x.port)+"/"+esc(x.protocol)+
+     "</td><td>"+
+     esc(x.service)+
+     "</td><td>"+
+     esc([x.product,x.version].filter(Boolean).join(" "))+
+     "</td></tr>"
   ).join(""));
 
   p67Rows("p67wireless",(w.networks||[]).map(x=>
-   "<tr><td>"+esc(x.ssid)+"</td><td>"+esc(x.bssid)+"</td><td>"+esc(x.rssi)+"</td><td>"+esc(x.frequency_mhz)+"</td><td>"+esc(x.security||x.capabilities)+"</td></tr>"
+   "<tr><td>"+
+     esc(x.ssid)+
+     "</td><td>"+
+     esc(x.bssid)+
+     "</td><td>"+
+     esc(x.rssi)+
+     "</td><td>"+
+     esc(x.frequency_mhz)+
+     "</td><td>"+
+     esc(x.security||x.capabilities)+
+     "</td></tr>"
   ).join(""));
 
   p67Rows("p67detections",(d.detections||[]).map(x=>
-   "<tr><td class='"+(x.severity==="INFO"?"ok":"warn")+"'>"+esc(x.severity)+"</td><td>"+esc(x.title)+"</td><td>"+esc(x.detail)+"</td></tr>"
+   "<tr><td class='"+
+     (x.severity==="INFO"?"ok":"warn")+
+     "'>"+
+     esc(x.severity)+
+     "</td><td>"+
+     esc(x.title)+
+     "</td><td>"+
+     esc(x.detail)+
+     "</td></tr>"
   ).join(""));
 
   p67Rows("p67boundary",Object.entries(d.capabilities||{}).map(([k,v])=>
-   "<tr><td>"+esc(k)+"</td><td>"+esc(v)+"</td></tr>"
+   "<tr><td>"+
+     esc(k)+
+     "</td><td>"+
+     esc(v)+
+     "</td></tr>"
   ).join(""));
 
  }catch(error){
-  document.getElementById("p67status").textContent="[ OFFLINE ] assessment telemetry unavailable";
+  console.error("Phase 6 telemetry error:",error);
+  document.getElementById("p67status").textContent =
+    "[ OFFLINE ] assessment telemetry unavailable";
  }
 }
 
