@@ -6,6 +6,7 @@ from pathlib import Path
 
 from assessment.engine import run_assessment
 from assessment.report import build_report, write_report
+from assessment.findings import generate_findings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 RUN_DIR = BASE_DIR / "evidence"
@@ -34,11 +35,18 @@ def run_end_to_end(
     connectivity = result["connectivity"]
     services = result["services"]
 
+    findings = generate_findings(
+        connectivity,
+        services,
+    )
+
     report = build_report(
         session=session,
         connectivity=connectivity,
         services=services,
     )
+
+    report["findings"] = findings
 
     report["workflow"] = {
         "started_at": started,
@@ -58,17 +66,22 @@ def run_end_to_end(
         "gateway_status": connectivity["gateway_test"]["status"],
         "services_tested": len(services),
         "services_reachable": sum(
-            1 for item in services
+            1
+            for item in services
             if item.get("status") == "PASS"
         ),
+        "findings": len(findings),
         "report": str(report_path),
     }
 
-    RUN_DIR.mkdir(parents=True, exist_ok=True)
+    RUN_DIR.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
 
     summary_path = (
-        RUN_DIR /
-        f"{session['assessment_id']}_summary.json"
+        RUN_DIR
+        / f"{session['assessment_id']}_summary.json"
     )
 
     summary_path.write_text(
@@ -77,7 +90,3 @@ def run_end_to_end(
     )
 
     return summary
-
-
-if __name__ == "__main__":
-    print("Use assessment.cli for command-line execution.")

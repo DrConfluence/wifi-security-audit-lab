@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wi-Fi Security Assessment</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1020;color:#e8edf7;font-family:system-ui,-apple-system,sans-serif}
+main{max-width:900px;margin:auto;padding:24px}
+h1{margin-bottom:4px}
+.muted{color:#9aa7bd}
+.card{background:#121a2d;border:1px solid #263452;border-radius:14px;padding:18px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.metric{font-size:28px;font-weight:700}
+.label{font-size:12px;text-transform:uppercase;color:#8fa0bc}
+.badge{display:inline-block;padding:5px 9px;border-radius:8px;background:#263452}
+table{width:100%;border-collapse:collapse}
+td,th{text-align:left;padding:10px;border-bottom:1px solid #263452}
+code{color:#b8d4ff}
+@media(max-width:600px){main{padding:14px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<h1>Wi-Fi Security Assessment</h1>
+<div class="muted">Authorized assessment evidence dashboard</div>
+
+<div class="card">
+<div class="label">Assessment</div>
+<div class="metric" id="assessment">—</div>
+<div id="target" class="muted">Target unavailable</div>
+</div>
+
+<div class="grid">
+<div class="card">
+<div class="label">Authorization</div>
+<div class="metric" id="authorization">—</div>
+</div>
+
+<div class="card">
+<div class="label">Connection</div>
+<div class="metric" id="connection">—</div>
+</div>
+</div>
+
+<div class="card">
+<h2>Phase 1 — Connectivity</h2>
+<table>
+<tr><th>Connection state</th><td id="state">—</td></tr>
+<tr><th>Gateway</th><td id="gateway">—</td></tr>
+<tr><th>Gateway validation</th><td id="gatewayStatus">—</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h2>Phase 2 — Services</h2>
+<table>
+<thead><tr><th>Service</th><th>Port</th><th>Status</th></tr></thead>
+<tbody id="services">
+<tr><td colspan="3">No Phase-2 data supplied</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<h2>Assessment Findings</h2>
+<table>
+<thead><tr><th>ID</th><th>Severity</th><th>Finding</th><th>Status</th></tr></thead>
+<tbody id="findings">
+<tr><td colspan="4">No findings supplied</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<h2>Methodology</h2>
+<p>
+Discovery → authorization → connection verification →
+gateway validation → scoped service validation → evidence → report.
+</p>
+<p class="muted">
+A network being visible does not establish authorization.
+Unavailable Android telemetry is reported as unavailable rather
+than interpreted as successful access.
+</p>
+</div>
+</main>
+
+<script>
+const params = new URLSearchParams(location.search);
+const evidence = params.get("evidence");
+
+function text(id,value){
+  document.getElementById(id).textContent =
+    value === undefined || value === null ? "—" : value;
+}
+
+if(evidence){
+  fetch(evidence)
+    .then(r=>r.json())
+    .then(data=>{
+      const s=data.session || data;
+      const c=data.connectivity || data.phase_1 || {};
+
+      text("assessment",s.assessment_id);
+      text("target",s.ssid || "Target unavailable");
+      text("authorization",s.authorization_ref);
+      text("connection",c.connection_state);
+      text("state",c.connection_state);
+      text("gateway",c.gateway);
+      text("gatewayStatus",
+        c.gateway_test?.status ||
+        c.gateway_status ||
+        "NOT_AVAILABLE");
+
+      const services=data.services || c.services || [];
+      const body=document.getElementById("services");
+      body.innerHTML="";
+
+      if(!services.length){
+        body.innerHTML="<tr><td colspan='3'>No Phase-2 data supplied</td></tr>";
+      }else{
+        services.forEach(x=>{
+          body.innerHTML +=
+            `<tr><td>${x.service||"UNKNOWN"}</td>`+
+            `<td>${x.port||"—"}</td>`+
+            `<td><span class="badge">${x.status||"UNKNOWN"}</span></td></tr>`;
+        });
+      }
+    })
+    .catch(()=>{
+      text("assessment","Evidence unavailable");
+    });
+}
+</script>
+</body>
+</html>
