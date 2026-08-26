@@ -3,547 +3,1049 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#050805">
-<title>Wi-Fi Security Audit Lab | LAB-001</title>
+<meta name="description" content="WiFi Security Audit Lab — authorized wireless assessment and network visibility console">
+<title>WiFi Security Audit Lab</title>
+
 <style>
 :root{
-  --bg:#050805;
-  --panel:#0a110a;
-  --panel2:#0d160d;
-  --line:#19331b;
-  --green:#39ff88;
-  --green2:#20c967;
-  --text:#d9f7df;
-  --muted:#76917d;
-  --amber:#ffd166;
-  --red:#ff5c70;
-  --cyan:#57d9ff;
-  --shadow:0 0 35px rgba(57,255,136,.08);
+  --bg:#05090d;
+  --panel:#09131b;
+  --panel2:#0d1923;
+  --line:#193342;
+  --text:#e8f7ff;
+  --muted:#7893a4;
+  --cyan:#20d9ff;
+  --green:#32f28b;
+  --purple:#a56cff;
+  --amber:#ffd23f;
+  --red:#ff5266;
+  --blue:#4c8dff;
+  --shadow:0 0 30px rgba(32,217,255,.07);
 }
+
 *{box-sizing:border-box}
+
 html{scroll-behavior:smooth}
+
 body{
-  margin:0;background:radial-gradient(circle at top,#0b180d 0,#050805 42%,#030503 100%);
-  color:var(--text);font:15px/1.65 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace
+  margin:0;
+  background:
+    radial-gradient(circle at 80% 0%,rgba(32,217,255,.08),transparent 30%),
+    radial-gradient(circle at 20% 20%,rgba(165,108,255,.07),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-a{color:var(--green);text-decoration:none}
-a:hover{text-decoration:underline}
-header{
-  position:sticky;top:0;z-index:20;background:rgba(5,8,5,.92);
-  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)
+
+a{color:inherit;text-decoration:none}
+
+.app{
+  display:grid;
+  grid-template-columns:230px 1fr;
+  min-height:100vh;
 }
-.nav{max-width:1200px;margin:auto;padding:12px 18px;display:flex;gap:16px;align-items:center;overflow:auto}
-.brand{font-weight:800;white-space:nowrap;color:var(--green)}
-.nav a{color:#9ab9a1;white-space:nowrap;font-size:13px}
-.nav a:hover{color:var(--green)}
-main{max-width:1200px;margin:auto;padding:24px 18px 70px}
-.hero{
-  border:1px solid var(--line);background:linear-gradient(145deg,#0b150c,#071007);
-  box-shadow:var(--shadow);padding:28px;border-radius:14px;position:relative;overflow:hidden
+
+.sidebar{
+  position:sticky;
+  top:0;
+  height:100vh;
+  padding:24px 16px;
+  border-right:1px solid var(--line);
+  background:rgba(4,10,15,.92);
+  backdrop-filter:blur(16px);
 }
-.hero:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 23px,rgba(57,255,136,.025) 24px);pointer-events:none}
-.prompt{color:var(--green);font-size:13px}
-h1{font-size:clamp(28px,6vw,54px);line-height:1.05;margin:10px 0}
-h2{color:var(--green);font-size:20px;margin-top:42px}
-h3{font-size:15px;color:var(--cyan)}
-.subtitle{color:#9ab9a1;max-width:850px}
-.cursor{display:inline-block;width:9px;height:18px;background:var(--green);vertical-align:-3px;animation:blink 1s infinite}
-@keyframes blink{50%{opacity:0}}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
-.card{
-  border:1px solid var(--line);background:rgba(10,17,10,.88);padding:18px;border-radius:10px;
-  box-shadow:var(--shadow)
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:32px;
 }
-.metric{font-size:28px;font-weight:800;color:var(--green)}
-.label{font-size:12px;color:var(--muted);margin-top:3px}
-.status{color:var(--green)}
+
+.logo{
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--cyan);
+  border-radius:14px;
+  color:var(--cyan);
+  font-size:24px;
+  box-shadow:0 0 22px rgba(32,217,255,.18);
+}
+
+.brand strong{
+  display:block;
+  font-size:14px;
+}
+
+.brand small{
+  color:var(--muted);
+}
+
+.nav{
+  display:grid;
+  gap:7px;
+}
+
+.nav a{
+  padding:12px 13px;
+  border:1px solid transparent;
+  border-radius:10px;
+  color:#91aabb;
+  transition:.2s;
+}
+
+.nav a:hover,
+.nav a.active{
+  color:white;
+  border-color:#1b5b6d;
+  background:linear-gradient(90deg,rgba(32,217,255,.12),transparent);
+}
+
+.side-status{
+  margin-top:30px;
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:linear-gradient(145deg,#09151d,#071016);
+}
+
+.side-status .ok{
+  color:var(--green);
+  font-weight:700;
+}
+
+main{
+  min-width:0;
+  padding:22px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  margin-bottom:22px;
+}
+
+.kicker{
+  color:var(--cyan);
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+h1{
+  margin:6px 0 0;
+  font-size:clamp(25px,4vw,44px);
+  line-height:1.05;
+}
+
+.subtitle{
+  color:var(--muted);
+  margin-top:8px;
+}
+
+.live{
+  padding:10px 14px;
+  border:1px solid var(--green);
+  color:var(--green);
+  border-radius:999px;
+  white-space:nowrap;
+  font-size:12px;
+  font-weight:700;
+}
+
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+}
+
+.metric{
+  min-height:116px;
+  padding:17px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:linear-gradient(145deg,rgba(13,25,35,.95),rgba(6,13,19,.95));
+  box-shadow:var(--shadow);
+}
+
+.metric .label{
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.09em;
+}
+
+.metric .value{
+  margin-top:10px;
+  font-size:30px;
+  font-weight:800;
+}
+
+.metric.cyan .value{color:var(--cyan)}
+.metric.green .value{color:var(--green)}
+.metric.purple .value{color:var(--purple)}
+.metric.amber .value{color:var(--amber)}
+.metric.red .value{color:var(--red)}
+.metric.blue .value{color:var(--blue)}
+
+.section{
+  margin-top:18px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:rgba(7,15,22,.78);
+  overflow:hidden;
+}
+
+.section-head{
+  padding:16px 18px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  align-items:center;
+}
+
+.section-head h2{
+  margin:0;
+  font-size:15px;
+}
+
+.section-head span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.journey{
+  padding:28px 18px;
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:10px;
+  align-items:center;
+}
+
+.step{
+  text-align:center;
+  position:relative;
+}
+
+.step:not(:last-child)::after{
+  content:"→";
+  position:absolute;
+  right:-15px;
+  top:17px;
+  color:var(--cyan);
+  font-size:22px;
+}
+
+.icon{
+  width:56px;
+  height:56px;
+  margin:auto;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:1px solid var(--cyan);
+  color:var(--cyan);
+  background:#07141c;
+  font-size:24px;
+  box-shadow:0 0 24px rgba(32,217,255,.12);
+}
+
+.step.green .icon{
+  border-color:var(--green);
+  color:var(--green);
+}
+
+.step.purple .icon{
+  border-color:var(--purple);
+  color:var(--purple);
+}
+
+.step.amber .icon{
+  border-color:var(--amber);
+  color:var(--amber);
+}
+
+.step-title{
+  margin-top:10px;
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.step-info{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.two{
+  display:grid;
+  grid-template-columns:1.3fr .9fr;
+  gap:18px;
+}
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px;
+}
+
+th,td{
+  padding:12px 14px;
+  text-align:left;
+  border-bottom:1px solid #142630;
+  font-size:12px;
+}
+
+th{
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:.1em;
+}
+
+.signal{
+  font-weight:800;
+}
+
+.good{color:var(--green)}
 .warn{color:var(--amber)}
 .danger{color:var(--red)}
-section{scroll-margin-top:70px}
+.info{color:var(--cyan)}
+
 .terminal{
-  border:1px solid #214925;border-radius:10px;overflow:hidden;background:#020502;
-  box-shadow:var(--shadow);margin:16px 0
+  background:#020608;
+  font-family:"SFMono-Regular",Consolas,monospace;
+  min-height:330px;
+  padding:18px;
+  color:#b9ffd6;
+  font-size:12px;
+  line-height:1.75;
+  overflow:auto;
 }
-.termbar{background:#0c170d;padding:8px 12px;color:var(--muted);border-bottom:1px solid var(--line)}
-.termout{padding:16px;white-space:pre-wrap;overflow:auto;color:#bdeec8}
-.promptline{color:var(--green)}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line)}
-th{color:var(--green);position:sticky;top:0;background:#0a110a}
-.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
-.badge{display:inline-block;border:1px solid var(--line);padding:3px 8px;border-radius:99px;font-size:11px}
-button{
-  font:inherit;background:#0a180c;color:var(--green);border:1px solid #25582c;
-  padding:8px 11px;border-radius:7px;cursor:pointer
+
+.prompt{color:var(--green)}
+.cmd{color:var(--cyan)}
+.output{color:#9fb7a8}
+
+.connection{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  padding:18px;
 }
-button:hover{background:#102314}
-.command{display:flex;gap:8px;align-items:center}
-.command code{flex:1;overflow:auto;white-space:nowrap;color:#c8f8d0}
-details{border:1px solid var(--line);border-radius:9px;margin:10px 0;background:#081008}
-summary{cursor:pointer;padding:12px;color:var(--green)}
-details>div{padding:0 14px 14px;color:#9ab9a1}
-.timeline{border-left:2px solid #214925;margin:20px 0;padding-left:20px}
-.event{margin:20px 0}.event b{color:var(--green)}
-footer{border-top:1px solid var(--line);margin-top:60px;padding-top:25px;color:var(--muted);font-size:12px}
-@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.hero{padding:20px}table{min-width:760px}}
-@media(max-width:480px){.grid{grid-template-columns:1fr}.nav{gap:12px}main{padding:14px 10px 50px}}
+
+.connection-card{
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#08121a;
+}
+
+.connection-card label{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+}
+
+.connection-card strong{
+  display:block;
+  margin-top:7px;
+  font-size:14px;
+}
+
+.bottom-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:18px;
+}
+
+.risk-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:13px 17px;
+  border-bottom:1px solid #142630;
+}
+
+.risk-row:last-child{border-bottom:0}
+
+.badge{
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:800;
+}
+
+.badge.warn{
+  background:rgba(255,210,63,.1);
+}
+
+.badge.good{
+  background:rgba(50,242,139,.1);
+}
+
+.footer{
+  margin:25px 0 10px;
+  padding-top:18px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  font-size:11px;
+}
+
+@media(max-width:1100px){
+  .metrics{grid-template-columns:repeat(3,1fr)}
+  .two{grid-template-columns:1fr}
+  .bottom-grid{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:760px){
+  .app{display:block}
+
+  .sidebar{
+    position:relative;
+    height:auto;
+    padding:12px;
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .brand{margin-bottom:10px}
+
+  .nav{
+    display:flex;
+    overflow:auto;
+  }
+
+  .nav a{
+    white-space:nowrap;
+    font-size:11px;
+  }
+
+  .side-status{display:none}
+
+  main{padding:12px}
+
+  .topbar{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .live{align-self:flex-start}
+
+  .metrics{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .metric{
+    min-height:95px;
+  }
+
+  .metric .value{
+    font-size:25px;
+  }
+
+  .journey{
+    display:flex;
+    overflow:auto;
+    padding:24px 12px;
+  }
+
+  .step{
+    min-width:105px;
+  }
+
+  .step:not(:last-child)::after{
+    right:-18px;
+  }
+
+  .connection{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .bottom-grid{
+    grid-template-columns:1fr;
+  }
+
+  .footer{
+    flex-direction:column;
+  }
+}
 </style>
 </head>
+
 <body>
-<header>
-<nav class="nav">
-  <span class="brand">root@wifi-audit:~$</span>
-  <a href="#status">status</a>
-  <a href="#wifi">wifi</a>
-  <a href="#lan">lan</a>
-  <a href="#services">services</a>
-  <a href="#evidence">evidence</a>
-  <a href="#architecture">architecture</a>
-  <a href="#roadmap">roadmap</a>
-  <a href="https://github.com/DrConfluence/wifi-security-audit-lab">github</a>
-</nav>
-</header>
 
-<main>
-<section class="hero" id="status">
-  <div class="prompt">root@termux:~/wifi-audit$ ./wifi-assess.sh --status LAB-001</div>
-  <h1>Wi-Fi Security<br>Audit Lab</h1>
-  <p class="subtitle">
-    Real Android/Termux wireless discovery → authorized LAN inventory →
-    service assessment → machine-readable evidence.
-  </p>
-  <p><span class="status">● LAB-001 ENGINEERING CHECKPOINT ONLINE</span> <span class="cursor"></span></p>
-</section>
+<div class="app">
 
-<div class="grid">
-  <div class="card"><div class="metric">13</div><div class="label">REAL APs OBSERVED</div></div>
-  <div class="card"><div class="metric">2</div><div class="label">LAN HOSTS OBSERVED</div></div>
-  <div class="card"><div class="metric">61</div><div class="label">AUTOMATED TESTS PASSING</div></div>
-  <div class="card"><div class="metric">1</div><div class="label">OPEN TCP SERVICE IDENTIFIED</div></div>
-</div>
+<aside class="sidebar">
 
-<section id="wifi">
-<h2>01 // REAL WI-FI DISCOVERY</h2>
-<div class="terminal">
-<div class="termbar">Termux session · termux-wifi-scaninfo</div>
-<div class="termout"><span class="promptline">$ termux-wifi-scaninfo | jq</span>
+  <div class="brand">
+    <div class="logo">⌁</div>
+    <div>
+      <strong>WiFi Security</strong>
+      <small>Audit Lab</small>
+    </div>
+  </div>
 
-REAL DEVICE OBSERVATION
-Networks observed: 13
-Fields: SSID / BSSID / RSSI / frequency / bandwidth / capabilities
+  <nav class="nav">
+    <a class="active" href="#dashboard">⌂ Dashboard</a>
+    <a href="#journey">⌁ WiFi Journey</a>
+    <a href="#networks">◉ Networks</a>
+    <a href="#devices">▣ Devices</a>
+    <a href="#services">▤ Services</a>
+    <a href="#terminal">›_ Terminal</a>
+    <a href="#findings">⚠ Findings</a>
+    <a href="#evidence">▧ Evidence</a>
+  </nav>
 
-The project records Android-exposed telemetry rather than fabricating
-radio observations.</div>
-</div>
+  <div class="side-status">
+    <div class="kicker">Assessment</div>
+    <h3 id="sideAssessment">LAB-001</h3>
+    <div class="ok">● AUTHORIZED ASSESSMENT</div>
+    <br>
+    <small>Connection</small>
+    <div id="sideConnection">Telemetry unavailable</div>
+  </div>
 
-<div class="tablewrap">
-<table>
-<thead><tr><th>SSID</th><th>BSSID</th><th>Band</th><th>RSSI</th><th>Security</th><th>WPS</th></tr></thead>
-<tbody>
-<tr><td>Shubh</td><td>32:93:58:39:45:b7</td><td>2.4 GHz</td><td>-69</td><td>WPA2</td><td>NO</td></tr>
-<tr><td>vivo V30e</td><td>de:ce:49:04:6b:2b</td><td>2.4 GHz</td><td>-96</td><td>WPA2</td><td>NO</td></tr>
-<tr><td>182VISHALJIO5.0</td><td>3e:f8:7e:5c:7d:8b</td><td>2.4 GHz</td><td>-94</td><td>WPA2</td><td>YES</td></tr>
-<tr><td>Desai</td><td>7e:b0:de:5a:92:e6</td><td>2.4 GHz</td><td>-97</td><td>WPA2</td><td>YES</td></tr>
-<tr><td>Thechavadapav-2.4G</td><td>54:a2:45:3f:5d:75</td><td>2.4 GHz</td><td>-96</td><td>WPA/WPA2</td><td>NO</td></tr>
-<tr><td>JioAirfiberA6</td><td>20:b5:c6:04:38:64</td><td>5 GHz</td><td>-94</td><td>WPA2</td><td>NO</td></tr>
-<tr><td>OmkarChaitu</td><td>84:d8:1b:75:45:06</td><td>2.4 GHz</td><td>-86</td><td>WPA2</td><td>YES</td></tr>
-<tr><td>W00_1875495768</td><td>4c:01:14:c3:85:7f</td><td>2.4 GHz</td><td>-98</td><td>WPA2</td><td>NO</td></tr>
-<tr><td>RH-2.4G-DDF7D0</td><td>44:95:3b:dd:f7:d0</td><td>2.4 GHz</td><td>-84</td><td>WPA/WPA2</td><td>YES</td></tr>
-<tr><td>MULTIPOINT@4.11</td><td>78:9a:18:8f:50:42</td><td>5 GHz</td><td>-88</td><td>OPEN/UNSPECIFIED</td><td>NO</td></tr>
-</tbody>
-</table>
-</div>
-<p class="label">The captured evidence set contained 13 networks; the table highlights the primary observed records.</p>
-</section>
+</aside>
 
-<section id="lan">
-<h2>02 // AUTHORIZED LAN INVENTORY</h2>
-<div class="grid">
-<div class="card"><div class="label">AUTHORIZED SSID</div><div>Shubh</div></div>
-<div class="card"><div class="label">DEVICE IP</div><div>172.22.25.69</div></div>
-<div class="card"><div class="label">TARGET</div><div>172.22.25.0/24</div></div>
-<div class="card"><div class="label">ADDITIONAL HOST</div><div>172.22.25.133</div></div>
-</div>
-<div class="terminal">
-<div class="termbar">authorized-lan.sh</div>
-<div class="termout"><span class="promptline">$ ./wifi-authorized-lan.sh LAB-001</span>
+<main id="dashboard">
 
-AUTHORIZED LAN INVENTORY
-SSID      : Shubh
-Device IP : 172.22.25.69
-Target    : 172.22.25.0/24
+  <header class="topbar">
+    <div>
+      <div class="kicker">WiFi / Network / Security / Evidence</div>
+      <h1>Network Visibility Console</h1>
+      <div class="subtitle">
+        From Wi-Fi activation to Internet access and authorized network assessment.
+      </div>
+    </div>
 
-HOSTS OBSERVED
-172.22.25.69
-172.22.25.133</div>
-</div>
-</section>
+    <div class="live">● DEMONSTRATION + EVIDENCE</div>
+  </header>
 
-<section id="services">
-<h2>03 // SERVICE ASSESSMENT</h2>
-<div class="card">
-<h3>172.22.25.133 : TCP/53</h3>
-<p><span class="badge">OPEN</span> <span class="badge">DNS</span> <span class="badge">dnsmasq 2.51</span></p>
-<p>Service identification was performed with Nmap and TCP connectivity was independently verified with Ncat.</p>
-</div>
-<div class="terminal">
-<div class="termbar">nmap · service inventory</div>
-<div class="termout"><span class="promptline">$ nmap -n -sT -sV --version-light --open -p 53 172.22.25.133</span>
+  <section class="metrics">
 
-PORT   STATE SERVICE REASON  VERSION
-53/tcp open  domain  syn-ack dnsmasq 2.51
+    <div class="metric cyan">
+      <div class="label">Access Points</div>
+      <div class="value" id="mAps">—</div>
+    </div>
 
-$ nc -vz -w 3 172.22.25.133 53
-Connected to 172.22.25.133:53</div>
-</div>
-</section>
+    <div class="metric green">
+      <div class="label">Open Networks</div>
+      <div class="value" id="mOpen">—</div>
+    </div>
 
-<section id="evidence">
-<h2>04 // EVIDENCE & VALIDATION</h2>
-<div class="grid">
-<div class="card"><div class="metric">61</div><div class="label">PYTEST PASS</div></div>
-<div class="card"><div class="metric">PASS</div><div class="label">PYTHON COMPILE</div></div>
-<div class="card"><div class="metric">PASS</div><div class="label">SHELL SYNTAX</div></div>
-<div class="card"><div class="metric">JSON/XML/TXT</div><div class="label">EVIDENCE FORMATS</div></div>
-</div>
+    <div class="metric amber">
+      <div class="label">Secured Networks</div>
+      <div class="value" id="mSecured">—</div>
+    </div>
 
-<div class="terminal">
-<div class="termbar">validation checkpoint</div>
-<div class="termout"><span class="promptline">$ python -m pytest -q</span>
-.............................................................
-61 passed
+    <div class="metric purple">
+      <div class="label">WPS Advertised</div>
+      <div class="value" id="mWps">—</div>
+    </div>
 
-<span class="promptline">$ python -m py_compile assessment/*.py</span>
-PYTHON COMPILE: PASS
+    <div class="metric blue">
+      <div class="label">Hosts Observed</div>
+      <div class="value" id="mHosts">—</div>
+    </div>
 
-<span class="promptline">$ bash -n wifi-assess.sh wifi-authorized.sh wifi-authorized-lan.sh</span>
-SHELL VALIDATION: PASS</div>
-</div>
+    <div class="metric red">
+      <div class="label">Services</div>
+      <div class="value" id="mServices">—</div>
+    </div>
 
-<details><summary>Evidence model</summary>
-<div>Wireless discovery, connection telemetry, LAN host discovery, service inventory and reporting are separate layers. Automated tests are not presented as live network evidence.</div>
-</details>
-</section>
+  </section>
 
-<section id="architecture">
-<h2>05 // ARCHITECTURE</h2>
-<div class="terminal">
-<div class="termout">Android Wi-Fi subsystem
-        │
-        ▼
-    Termux:API
-        │
-        ├── Wi-Fi discovery
-        └── Connection telemetry
-        │
-        ▼
-Authorized assessment scope
-        │
-        ├── LAN host discovery
-        └── TCP service inventory
-        │
-        ▼
-Evidence
-        │
-        ├── JSON
-        ├── XML
-        └── TXT
-        │
-        ▼
-Assessment reporting</div>
-</div>
-</section>
+  <section class="section" id="journey">
 
-<section>
-<h2>06 // PLATFORM & CAPABILITY BOUNDARIES</h2>
-<div class="card">
-<p><span class="warn">⚠ CURRENT ANDROID CONDITION</span></p>
-<p>Android/Termux can restrict low-level networking interfaces. During testing,
-<code>ip route</code>, <code>ip neigh</code> and some <code>/proc/net</code>
-interfaces returned permission errors.</p>
-<p>Termux:API Wi-Fi scanning also requires Android Location to be enabled.
-When unavailable, the project records the limitation instead of inventing results.</p>
-</div>
-</section>
+    <div class="section-head">
+      <h2>WiFi Journey — Phone → Internet → Assessment</h2>
+      <span>visual walkthrough</span>
+    </div>
 
-<section id="roadmap">
-<h2>07 // ASSESSMENT WORKFLOW</h2>
-<div class="timeline">
-<div class="event"><b>✓ Phase 1</b><br>Real Wi-Fi discovery</div>
-<div class="event"><b>✓ Phase 2</b><br>Connection telemetry</div>
-<div class="event"><b>✓ Phase 3</b><br>Authorized LAN inventory</div>
-<div class="event"><b>✓ Phase 4</b><br>TCP service/version inventory</div>
-<div class="event"><b>✓ Phase 5</b><br>Evidence + regression testing</div>
-<div class="event"><b>→ Network Visibility</b><br>Assessment dashboard + stronger reporting</div>
-<div class="event"><b>→ Interactive Console</b><br>Detection, risk scoring and remediation workflows</div>
-</div>
-</section>
+    <div class="journey">
 
-<section>
-<h2>08 // TECHNICAL DOCUMENTATION</h2>
-<div class="grid">
-<a class="card" href="wiki/Home.md">Home<br><span class="label">Project overview</span></a>
-<a class="card" href="wiki/Status.md">Status<br><span class="label">LAB-001 state</span></a>
-<a class="card" href="wiki/Architecture.md">Architecture<br><span class="label">System design</span></a>
-<a class="card" href="wiki/Methodology.md">Methodology<br><span class="label">Assessment flow</span></a>
-<a class="card" href="wiki/WiFi-Discovery.md">Wi-Fi Discovery<br><span class="label">Wireless layer</span></a>
-<a class="card" href="wiki/LAN-Inventory.md">LAN Inventory<br><span class="label">Host discovery</span></a>
-<a class="card" href="wiki/Service-Assessment.md">Services<br><span class="label">Service inventory</span></a>
-<a class="card" href="wiki/Evidence.md">Evidence<br><span class="label">Artifacts</span></a>
-<a class="card" href="wiki/Testing.md">Testing<br><span class="label">Validation</span></a>
-<a class="card" href="wiki/Android-Termux-Limitations.md">Limitations<br><span class="label">Platform reality</span></a>
-<a class="card" href="wiki/Roadmap.md">Roadmap<br><span class="label">Next engineering stages</span></a>
-</div>
-</section>
+      <div class="step">
+        <div class="icon">📱</div>
+        <div class="step-title">WiFi Enabled</div>
+        <div class="step-info">radio active</div>
+      </div>
 
-<section>
-<h2>09 // OPERATOR CONSOLE</h2>
-<div id="commands"></div>
-</section>
+      <div class="step cyan">
+        <div class="icon">⌁</div>
+        <div class="step-title">Scanning</div>
+        <div class="step-info">AP discovery</div>
+      </div>
 
-<footer>
-Wi-Fi Security Audit Lab · LAB-001 · Android / Termux ·
-<a href="https://github.com/DrConfluence/wifi-security-audit-lab">GitHub Repository</a>
-<br><br>
-Authorized assessment only. Wireless visibility is not authorization.
-</footer>
+      <div class="step amber">
+        <div class="icon">📡</div>
+        <div class="step-title">Network Found</div>
+        <div class="step-info">SSID / RSSI / RF</div>
+      </div>
+
+      <div class="step purple">
+        <div class="icon">🔐</div>
+        <div class="step-title">Authenticated</div>
+        <div class="step-info">authorized access</div>
+      </div>
+
+      <div class="step green">
+        <div class="icon">▣</div>
+        <div class="step-title">IP Assigned</div>
+        <div class="step-info">DHCP / address</div>
+      </div>
+
+      <div class="step cyan">
+        <div class="icon">⌂</div>
+        <div class="step-title">Gateway + DNS</div>
+        <div class="step-info">route established</div>
+      </div>
+
+      <div class="step green">
+        <div class="icon">◎</div>
+        <div class="step-title">Internet</div>
+        <div class="step-info">connectivity</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section" id="networks">
+
+    <div class="section-head">
+      <h2>Wireless Environment</h2>
+      <span id="networkSource">public assessment evidence</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>SSID</th>
+            <th>BSSID</th>
+            <th>RSSI</th>
+            <th>FREQUENCY</th>
+            <th>BAND</th>
+            <th>SECURITY</th>
+            <th>WPS</th>
+          </tr>
+        </thead>
+        <tbody id="networkTable"></tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <div class="two">
+
+    <section class="section" id="terminal">
+
+      <div class="section-head">
+        <h2>CLI / Bash Assessment Flow</h2>
+        <span>authorized workflow</span>
+      </div>
+
+      <div class="terminal">
+        <div><span class="prompt">root@wifi-audit</span>:~/wifi-audit# <span class="cmd">wifi-assess --dashboard</span></div>
+        <div class="output">[+] Initializing wireless interface...</div>
+        <div class="output">[+] Wi-Fi radio state: READY</div>
+        <div class="output">[+] Scanning for nearby access points...</div>
+        <div class="output">[+] Normalizing SSID / BSSID / RSSI / frequency...</div>
+        <div class="output">[+] Classifying WPA / WPA2 / WPA3 / OPEN...</div>
+        <div class="output">[+] Checking WPS advertisements...</div>
+        <div class="output">[+] Evidence snapshot loaded.</div>
+        <div class="output">[+] Assessment boundary enforced.</div>
+        <br>
+        <div><span class="prompt">root@wifi-audit</span>:~/wifi-audit# <span class="cmd">status</span></div>
+        <div class="output">ASSESSMENT: <span class="good">READY</span></div>
+        <div class="output">MODE: AUTHORIZED / DEMONSTRATION</div>
+        <div class="output">LIVE CONNECTION: <span id="terminalConnection">UNAVAILABLE</span></div>
+        <br>
+        <div><span class="prompt">root@wifi-audit</span>:~/wifi-audit# <span class="cmd">_</span></div>
+      </div>
+
+    </section>
+
+    <section class="section" id="devices">
+
+      <div class="section-head">
+        <h2>Connection Intelligence</h2>
+        <span>network path</span>
+      </div>
+
+      <div class="connection">
+
+        <div class="connection-card">
+          <label>SSID</label>
+          <strong id="cSsid">UNAVAILABLE</strong>
+        </div>
+
+        <div class="connection-card">
+          <label>IP Address</label>
+          <strong id="cIp">—</strong>
+        </div>
+
+        <div class="connection-card">
+          <label>Gateway</label>
+          <strong id="cGateway">—</strong>
+        </div>
+
+        <div class="connection-card">
+          <label>RSSI</label>
+          <strong id="cRssi">—</strong>
+        </div>
+
+        <div class="connection-card">
+          <label>Frequency</label>
+          <strong id="cFrequency">—</strong>
+        </div>
+
+        <div class="connection-card">
+          <label>Band</label>
+          <strong id="cBand">—</strong>
+        </div>
+
+        <div class="connection-card">
+          <label>DNS</label>
+          <strong id="cDns">—</strong>
+        </div>
+
+        <div class="connection-card">
+          <label>Internet</label>
+          <strong id="cInternet">EVIDENCE</strong>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="bottom-grid">
+
+    <section class="section" id="findings">
+
+      <div class="section-head">
+        <h2>Risk Snapshot</h2>
+        <span>derived from evidence</span>
+      </div>
+
+      <div class="risk-row">
+        <span>Open networks</span>
+        <span class="badge warn" id="riskOpen">—</span>
+      </div>
+
+      <div class="risk-row">
+        <span>WPS advertised</span>
+        <span class="badge warn" id="riskWps">—</span>
+      </div>
+
+      <div class="risk-row">
+        <span>Critical issues</span>
+        <span class="badge good">0 observed</span>
+      </div>
+
+    </section>
+
+    <section class="section" id="services">
+
+      <div class="section-head">
+        <h2>Services Observed</h2>
+        <span>authorized scope</span>
+      </div>
+
+      <div id="serviceSummary" style="padding:18px;color:var(--muted)">
+        Loading service evidence...
+      </div>
+
+    </section>
+
+    <section class="section" id="evidence">
+
+      <div class="section-head">
+        <h2>Evidence</h2>
+        <span>provenance</span>
+      </div>
+
+      <div style="padding:18px;line-height:1.8;color:var(--muted)">
+        <div>Assessment: <strong id="eAssessment">LAB-001</strong></div>
+        <div>Source: <strong>PUBLIC SNAPSHOT</strong></div>
+        <div>Mode: <strong>AUTHORIZED ASSESSMENT</strong></div>
+        <div>Generated: <strong id="generated">—</strong></div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <footer class="footer">
+    <span>WiFi Security Audit Lab · v2.0</span>
+    <span>Evidence-driven · authorized assessment only</span>
+    <span>Network → Internet → Security</span>
+  </footer>
+
 </main>
-
-
-<section id="phase67" style="margin:28px 0;border:1px solid #263238;background:#050807;color:#c8e8d0;font-family:monospace">
-<style>
-#phase67 .p67-head{padding:18px;border-bottom:1px solid #263238}
-#phase67 .p67-prompt{color:#55ff88;font-size:12px}
-#phase67 h2{margin:7px 0;color:#d9ffe5}
-#phase67 .p67-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px}
-#phase67 .p67-card{border:1px solid #1d3325;background:#08100b;padding:14px}
-#phase67 .p67-label{font-size:10px;color:#6c8f78;text-transform:uppercase}
-#phase67 .p67-value{font-size:20px;color:#b9ffca;margin-top:8px}
-#phase67 .p67-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 14px}
-#phase67 button{font:12px monospace;background:#0a150d;color:#7dff9e;border:1px solid #274b32;padding:8px 12px;cursor:pointer}
-#phase67 .p67-panel{display:none;padding:14px}
-#phase67 .p67-panel.active{display:block}
-#phase67 table{width:100%;border-collapse:collapse;font-size:12px}
-#phase67 th,#phase67 td{text-align:left;padding:9px;border-bottom:1px solid #17251b}
-#phase67 th{color:#6c8f78}
-#phase67 .ok{color:#55ff88}
-#phase67 .warn{color:#ffd166}
-@media(max-width:700px){#phase67 .p67-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:450px){#phase67 .p67-grid{grid-template-columns:1fr}}
-</style>
-
-<div class="p67-head">
-<div class="p67-prompt">root@wifi-audit:~/wifi-audit# ./assessment-console --dashboard</div>
-<h2>NETWORK VISIBILITY // SECURITY ASSESSMENT CONSOLE</h2>
-<div class="p67-prompt" id="p67status">[ BOOT ] loading assessment telemetry...</div>
 </div>
-
-<div class="p67-grid">
-<div class="p67-card"><div class="p67-label">Assessment</div><div class="p67-value" id="p67assessment">LAB-001</div></div>
-<div class="p67-card"><div class="p67-label">Hosts</div><div class="p67-value" id="p67hosts">—</div></div>
-<div class="p67-card"><div class="p67-label">Services</div><div class="p67-value" id="p67services">—</div></div>
-<div class="p67-card"><div class="p67-label">APs observed</div><div class="p67-value" id="p67aps">—</div></div>
-<div class="p67-card"><div class="p67-label">Open networks</div><div class="p67-value" id="p67open">—</div></div>
-<div class="p67-card"><div class="p67-label">Secured networks</div><div class="p67-value" id="p67secured">—</div></div>
-<div class="p67-card"><div class="p67-label">WPS advertised</div><div class="p67-value" id="p67wps">—</div></div>
-</div>
-
-<div class="p67-tabs">
-<button onclick="p67Tab('overview')">01 overview</button>
-<button onclick="p67Tab('assets')">02 assets</button>
-<button onclick="p67Tab('services')">03 services</button>
-<button onclick="p67Tab('wireless')">04 wireless</button>
-<button onclick="p67Tab('detections')">05 detections</button>
-<button onclick="p67Tab('boundary')">06 boundary</button>
-</div>
-
-<div id="p67-overview" class="p67-panel active">
-<div class="p67-grid">
-<div class="p67-card"><div class="p67-label">Network</div><div class="p67-value" id="p67network">—</div></div>
-<div class="p67-card"><div class="p67-label">Device IP</div><div class="p67-value" id="p67ip">—</div></div>
-<div class="p67-card"><div class="p67-label">RSSI</div><div class="p67-value" id="p67rssi">—</div></div>
-<div class="p67-card"><div class="p67-label">Generated</div><div class="p67-value" id="p67generated">—</div></div>
-</div>
-</div>
-
-<div id="p67-assets" class="p67-panel">
-<table><thead><tr><th>HOST</th><th>STATE</th><th>NAME</th></tr></thead><tbody id="p67assets"></tbody></table>
-</div>
-
-<div id="p67-services" class="p67-panel">
-<table><thead><tr><th>HOST</th><th>PORT</th><th>SERVICE</th><th>VERSION</th></tr></thead><tbody id="p67servicesTable"></tbody></table>
-</div>
-
-<div id="p67-wireless" class="p67-panel">
-<table><thead><tr><th>SSID</th><th>BSSID</th><th>RSSI</th><th>FREQ</th><th>SECURITY</th></tr></thead><tbody id="p67wireless"></tbody></table>
-</div>
-
-<div id="p67-detections" class="p67-panel">
-<table><thead><tr><th>SEVERITY</th><th>FINDING</th><th>DETAIL</th></tr></thead><tbody id="p67detections"></tbody></table>
-</div>
-
-<div id="p67-boundary" class="p67-panel">
-<table><thead><tr><th>CAPABILITY</th><th>STATE</th></tr></thead><tbody id="p67boundary"></tbody></table>
-</div>
-</section>
 
 <script>
-const commands=[
-"cd ~/wifi-audit && termux-wifi-connectioninfo | jq .",
-"cd ~/wifi-audit && termux-wifi-scaninfo | jq .",
-"cd ~/wifi-audit && python -m assessment.phase6",
-"cd ~/wifi-audit && python -m pytest -q",
-"cd ~/wifi-audit && ./wifi-authorized-lan.sh LAB-001"
-];
+async function loadDashboard(){
 
-const esc=v=>String(v??"—").replace(/[&<>"]/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[x]));
+  try{
 
-function p67Tab(name){
- document.querySelectorAll("#phase67 .p67-panel").forEach(x=>x.classList.remove("active"));
- document.getElementById("p67-"+name).classList.add("active");
+    const response = await fetch(
+      "public-data/phase6_snapshot.json",
+      {cache:"no-store"}
+    );
+
+    if(!response.ok)
+      throw new Error("HTTP "+response.status);
+
+    const d = await response.json();
+
+    const n = d.network || {};
+    const a = d.assets || {};
+    const sv = d.services || {};
+    const w = d.wireless || {};
+
+    const networks =
+      Array.isArray(w.networks) ? w.networks : [];
+
+    const openNetworks = networks.filter(x =>
+      String(x.security || "")
+        .toUpperCase()
+        .startsWith("OPEN")
+    );
+
+    const securedNetworks =
+      networks.filter(x =>
+        !String(x.security || "")
+          .toUpperCase()
+          .startsWith("OPEN")
+      );
+
+    const wpsNetworks =
+      networks.filter(x => x.wps_advertised === true);
+
+    const set = (id,value) => {
+      const el=document.getElementById(id);
+      if(el) el.textContent=value;
+    };
+
+    set("mAps",w.networks_observed ?? networks.length);
+    set("mOpen",openNetworks.length);
+    set("mSecured",securedNetworks.length);
+    set("mWps",wpsNetworks.length);
+    set("mHosts",a.hosts_observed ?? 0);
+    set("mServices",sv.services_observed ?? 0);
+
+    set("sideAssessment",d.assessment || "LAB-001");
+    set("eAssessment",d.assessment || "LAB-001");
+
+    const telemetryAvailable =
+      d.network_status !== "telemetry_unavailable" &&
+      n.ssid &&
+      n.ssid !== "<unknown ssid>";
+
+    set(
+      "sideConnection",
+      telemetryAvailable ? "Connected" : "Telemetry unavailable"
+    );
+
+    set(
+      "terminalConnection",
+      telemetryAvailable ? "CONNECTED" : "UNAVAILABLE"
+    );
+
+    set(
+      "cSsid",
+      telemetryAvailable ? n.ssid : "UNAVAILABLE"
+    );
+
+    set(
+      "cIp",
+      telemetryAvailable && n.device_ip
+        ? n.device_ip
+        : "—"
+    );
+
+    set(
+      "cRssi",
+      telemetryAvailable &&
+      Number.isFinite(n.rssi) &&
+      n.rssi > -127
+        ? n.rssi+" dBm"
+        : "—"
+    );
+
+    set(
+      "cFrequency",
+      telemetryAvailable && n.frequency_mhz
+        ? n.frequency_mhz+" MHz"
+        : "—"
+    );
+
+    set(
+      "cBand",
+      telemetryAvailable && n.frequency_mhz
+        ? n.frequency_mhz < 3000
+          ? "2.4 GHz"
+          : "5 GHz"
+        : "—"
+    );
+
+    set(
+      "cGateway",
+      telemetryAvailable && n.gateway
+        ? n.gateway
+        : "—"
+    );
+
+    set(
+      "cDns",
+      telemetryAvailable && n.dns
+        ? n.dns
+        : "—"
+    );
+
+    set(
+      "cInternet",
+      telemetryAvailable
+        ? "CONNECTED"
+        : "EVIDENCE"
+    );
+
+    set(
+      "riskOpen",
+      openNetworks.length+" observed"
+    );
+
+    set(
+      "riskWps",
+      wpsNetworks.length+" advertised"
+    );
+
+    set(
+      "generated",
+      d.generated_at
+        ? new Date(d.generated_at)
+            .toLocaleString(
+              "en-GB",
+              {
+                day:"2-digit",
+                month:"short",
+                year:"numeric",
+                hour:"2-digit",
+                minute:"2-digit",
+                second:"2-digit",
+                timeZone:"UTC"
+              }
+            )+" UTC"
+        : "—"
+    );
+
+    const table =
+      document.getElementById("networkTable");
+
+    table.innerHTML =
+      networks.map(x => {
+
+        const security =
+          x.security ||
+          x.capabilities ||
+          "UNKNOWN";
+
+        const rssi =
+          Number.isFinite(x.rssi)
+            ? x.rssi+" dBm"
+            : "—";
+
+        const frequency =
+          x.frequency_mhz
+            ? x.frequency_mhz+" MHz"
+            : "—";
+
+        const band =
+          x.frequency_mhz
+            ? x.frequency_mhz < 3000
+              ? "2.4 GHz"
+              : "5 GHz"
+            : "—";
+
+        const securityClass =
+          String(security)
+            .toUpperCase()
+            .startsWith("OPEN")
+              ? "danger"
+              : "good";
+
+        return `
+          <tr>
+            <td>${esc(x.ssid || "<hidden>")}</td>
+            <td>${esc(x.bssid || "—")}</td>
+            <td class="signal">${esc(rssi)}</td>
+            <td>${esc(frequency)}</td>
+            <td>${esc(band)}</td>
+            <td class="${securityClass}">
+              ${esc(security)}
+            </td>
+            <td class="${x.wps_advertised ? "warn" : "good"}">
+              ${x.wps_advertised ? "YES" : "NO"}
+            </td>
+          </tr>
+        `;
+
+      }).join("");
+
+    set(
+      "networkSource",
+      "public assessment evidence · "+
+      networks.length+" normalized observations"
+    );
+
+    set(
+      "serviceSummary",
+      (sv.services_observed ?? 0)+
+      " service observations available in the assessment evidence."
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    document.getElementById("terminalConnection")
+      .textContent="OFFLINE";
+
+    document.getElementById("networkSource")
+      .textContent="evidence unavailable";
+
+  }
 }
 
-function p67Rows(id,html){
- document.getElementById(id).innerHTML=html||"<tr><td colspan='8'>NO DATA</td></tr>";
+function esc(value){
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
-async function loadPhase6(){
- try{
-  const response=await fetch("public-data/phase6_snapshot.json",{cache:"no-store"});
-  if(!response.ok) throw new Error(response.status);
-
-  const d=await response.json();
-  const n=d.network||{};
-  const a=d.assets||{};
-  const sv=d.services||{};
-  const w=d.wireless||{};
-
-  document.getElementById("p67assessment").textContent=d.assessment||"LAB-001";
-  document.getElementById("p67hosts").textContent=a.hosts_observed??0;
-  document.getElementById("p67services").textContent=sv.services_observed??0;
-  document.getElementById("p67aps").textContent=w.networks_observed??0;
-
-  // Derive wireless assessment metrics from normalized scan results.
-  const networks = Array.isArray(w.networks) ? w.networks : [];
-  const openNetworks = networks.filter(x =>
-    String(x.security || "").toUpperCase().startsWith("OPEN")
-  );
-  const securedNetworks = networks.filter(x =>
-    !String(x.security || "").toUpperCase().startsWith("OPEN")
-  );
-  const wpsNetworks = networks.filter(x => x.wps_advertised === true);
-
-  const openEl = document.getElementById("p67open");
-  const securedEl = document.getElementById("p67secured");
-  const wpsEl = document.getElementById("p67wps");
-
-  if(openEl) openEl.textContent = openNetworks.length;
-  if(securedEl) securedEl.textContent = securedNetworks.length;
-  if(wpsEl) wpsEl.textContent = wpsNetworks.length;
-
-  const telemetryAvailable =
-    d.network_status !== "telemetry_unavailable" &&
-    n.ssid &&
-    n.ssid !== "<unknown ssid>";
-
-  document.getElementById("p67network").textContent =
-    telemetryAvailable ? n.ssid : "UNAVAILABLE";
-
-  document.getElementById("p67ip").textContent =
-    telemetryAvailable && n.device_ip ? n.device_ip : "—";
-
-  document.getElementById("p67rssi").textContent =
-    telemetryAvailable &&
-    Number.isFinite(n.rssi) &&
-    n.rssi > -127
-      ? n.rssi + " dBm"
-      : "—";
-
-  document.getElementById("p67generated").textContent =
-    d.generated_at || "—";
-
-  document.getElementById("p67status").textContent =
-    telemetryAvailable
-      ? "[ OK ] assessment evidence loaded"
-      : "[ OK ] assessment evidence loaded | [ INFO ] connection telemetry unavailable";
-
-  p67Rows("p67assets",(a.hosts||[]).map(h=>{
-   const addr=(h.addresses||[]).find(x=>x.type==="ipv4");
-
-   return "<tr><td>"+
-     esc(addr?.address)+
-     "</td><td class='ok'>UP</td><td>"+
-     esc((h.hostnames||[]).join(", "))+
-     "</td></tr>";
-  }).join(""));
-
-  p67Rows("p67servicesTable",(sv.services||[]).map(x=>
-   "<tr><td>"+
-     esc(x.ip)+
-     "</td><td>"+
-     esc(x.port)+"/"+esc(x.protocol)+
-     "</td><td>"+
-     esc(x.service)+
-     "</td><td>"+
-     esc([x.product,x.version].filter(Boolean).join(" "))+
-     "</td></tr>"
-  ).join(""));
-
-  p67Rows("p67wireless",(w.networks||[]).map(x=>
-   "<tr><td>"+
-     esc(x.ssid)+
-     "</td><td>"+
-     esc(x.bssid)+
-     "</td><td>"+
-     esc(x.rssi)+
-     "</td><td>"+
-     esc(x.frequency_mhz)+
-     "</td><td>"+
-     esc(x.security||x.capabilities)+
-     "</td></tr>"
-  ).join(""));
-
-  p67Rows("p67detections",(d.detections||[]).map(x=>
-   "<tr><td class='"+
-     (x.severity==="INFO"?"ok":"warn")+
-     "'>"+
-     esc(x.severity)+
-     "</td><td>"+
-     esc(x.title)+
-     "</td><td>"+
-     esc(x.detail)+
-     "</td></tr>"
-  ).join(""));
-
-  p67Rows("p67boundary",Object.entries(d.capabilities||{}).map(([k,v])=>
-   "<tr><td>"+
-     esc(k)+
-     "</td><td>"+
-     esc(v)+
-     "</td></tr>"
-  ).join(""));
-
- }catch(error){
-  console.error("Phase 6 telemetry error:",error);
-  document.getElementById("p67status").textContent =
-    "[ OFFLINE ] assessment telemetry unavailable";
- }
-}
-
-loadPhase6();
-
-const box=document.getElementById("commands");
-commands.forEach((cmd,i)=>{
- const div=document.createElement("div");
- div.className="terminal";
- div.innerHTML='<div class="termbar">command '+(i+1)+'</div><div class="termout command"><code>'+cmd.replaceAll("&","&amp;").replaceAll("<","&lt;")+'</code><button>copy</button></div>';
- div.querySelector("button").onclick=async()=>{
-  await navigator.clipboard.writeText(cmd);
-  div.querySelector("button").textContent="copied";
-  setTimeout(()=>div.querySelector("button").textContent="copy",1200);
- };
- box.appendChild(div);
-});
+loadDashboard();
 </script>
+
 </body>
 </html>
