@@ -255,7 +255,7 @@ Assessment reporting</div>
 </section>
 
 <section>
-<h2>06 // PLATFORM REALITY</h2>
+<h2>06 // PLATFORM & CAPABILITY BOUNDARIES</h2>
 <div class="card">
 <p><span class="warn">⚠ CURRENT ANDROID CONDITION</span></p>
 <p>Android/Termux can restrict low-level networking interfaces. During testing,
@@ -267,20 +267,20 @@ When unavailable, the project records the limitation instead of inventing result
 </section>
 
 <section id="roadmap">
-<h2>07 // ENGINEERING ROADMAP</h2>
+<h2>07 // ASSESSMENT WORKFLOW</h2>
 <div class="timeline">
 <div class="event"><b>✓ Phase 1</b><br>Real Wi-Fi discovery</div>
 <div class="event"><b>✓ Phase 2</b><br>Connection telemetry</div>
 <div class="event"><b>✓ Phase 3</b><br>Authorized LAN inventory</div>
 <div class="event"><b>✓ Phase 4</b><br>TCP service/version inventory</div>
 <div class="event"><b>✓ Phase 5</b><br>Evidence + regression testing</div>
-<div class="event"><b>→ Phase 6</b><br>Assessment dashboard + stronger reporting</div>
-<div class="event"><b>→ Phase 7</b><br>Detection, risk scoring and remediation workflows</div>
+<div class="event"><b>→ Network Visibility</b><br>Assessment dashboard + stronger reporting</div>
+<div class="event"><b>→ Interactive Console</b><br>Detection, risk scoring and remediation workflows</div>
 </div>
 </section>
 
 <section>
-<h2>08 // DOCUMENTATION</h2>
+<h2>08 // TECHNICAL DOCUMENTATION</h2>
 <div class="grid">
 <a class="card" href="wiki/Home.md">Home<br><span class="label">Project overview</span></a>
 <a class="card" href="wiki/Status.md">Status<br><span class="label">LAB-001 state</span></a>
@@ -297,7 +297,7 @@ When unavailable, the project records the limitation instead of inventing result
 </section>
 
 <section>
-<h2>09 // TERMUX QUICK ACTIONS</h2>
+<h2>09 // OPERATOR CONSOLE</h2>
 <div id="commands"></div>
 </section>
 
@@ -333,9 +333,9 @@ Authorized assessment only. Wireless visibility is not authorization.
 </style>
 
 <div class="p67-head">
-<div class="p67-prompt">root@wifi-audit:~/wifi-audit# ./phase6 --dashboard</div>
-<h2>PHASE 06 // NETWORK VISIBILITY</h2>
-<div class="p67-prompt" id="p67status">[ BOOT ] loading evidence...</div>
+<div class="p67-prompt">root@wifi-audit:~/wifi-audit# ./assessment-console --dashboard</div>
+<h2>NETWORK VISIBILITY // SECURITY ASSESSMENT CONSOLE</h2>
+<div class="p67-prompt" id="p67status">[ BOOT ] loading assessment telemetry...</div>
 </div>
 
 <div class="p67-grid">
@@ -422,7 +422,7 @@ async function loadPhase6(){
   document.getElementById("p67ip").textContent=n.device_ip||"0.0.0.0";
   document.getElementById("p67rssi").textContent=n.rssi??"—";
   document.getElementById("p67generated").textContent=d.generated_at||"—";
-  document.getElementById("p67status").textContent="[ OK ] phase6 evidence loaded";
+  document.getElementById("p67status").textContent="[ OK ] assessment telemetry loaded";
 
   p67Rows("p67assets",(a.hosts||[]).map(h=>{
    const addr=(h.addresses||[]).find(x=>x.type==="ipv4");
@@ -446,7 +446,7 @@ async function loadPhase6(){
   ).join(""));
 
  }catch(error){
-  document.getElementById("p67status").textContent="[ OFFLINE ] phase6 evidence unavailable";
+  document.getElementById("p67status").textContent="[ OFFLINE ] assessment telemetry unavailable";
  }
 }
 
