@@ -3,107 +3,145 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="WiFi Security Audit Lab — authorized wireless assessment and network visibility console">
-<title>WiFi Security Audit Lab</title>
-
+<title>WiFi Security Audit Lab — Network Journey</title>
 <style>
 :root{
-  --bg:#05090d;
-  --panel:#09131b;
-  --panel2:#0d1923;
-  --line:#193342;
-  --text:#e8f7ff;
-  --muted:#7893a4;
-  --cyan:#20d9ff;
-  --green:#32f28b;
-  --purple:#a56cff;
-  --amber:#ffd23f;
-  --red:#ff5266;
-  --blue:#4c8dff;
-  --shadow:0 0 30px rgba(32,217,255,.07);
+  --bg:#071018;--panel:#0d1823;--panel2:#101f2d;--line:#203447;
+  --text:#edf7ff;--muted:#8ea6b9;--cyan:#36d9ff;--blue:#5b8cff;
+  --green:#39e58c;--violet:#a77bff;--amber:#ffbf5a;--red:#ff6b7d;
+  --shadow:0 18px 55px #0008;
 }
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 75% 5%,#143c57 0,#071018 34%,#050b11 100%);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}
+a{color:inherit;text-decoration:none}.wrap{max-width:1500px;margin:auto;padding:24px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:8px 0 22px}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:44px;height:44px;border:1px solid #36d9ff66;border-radius:14px;display:grid;place-items:center;background:#0d2634;box-shadow:0 0 28px #36d9ff22;font-size:22px}
+.brand b{font-size:17px}.brand small{display:block;color:var(--muted)}
+.nav{display:flex;gap:8px;flex-wrap:wrap}.nav a{padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}.nav a:hover{color:var(--text);border-color:#36d9ff88}
+.hero{display:grid;grid-template-columns:1.35fr .65fr;gap:18px;margin-bottom:18px}
+.card{background:linear-gradient(145deg,#0e1b27ee,#09131cee);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.hero-main{padding:34px;min-height:320px;position:relative}.eyebrow{color:var(--cyan);letter-spacing:.14em;font-weight:700;font-size:11px}
+h1{font-size:clamp(38px,6vw,76px);line-height:.98;margin:12px 0 18px;max-width:900px;letter-spacing:-.055em}
+.hero p{max-width:720px;color:#a9bece;font-size:16px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.btn{padding:11px 16px;border-radius:12px;border:1px solid var(--line);background:#122435;color:#fff;cursor:pointer}.btn.primary{background:linear-gradient(90deg,#1689ad,#4d69d7);border-color:#55dfff66}
+.orbit{min-height:320px;display:grid;place-items:center;position:relative;background:radial-gradient(circle,#12334a 0,#09141f 54%,#081018 100%)}
+.orbit .ring{position:absolute;border:1px solid #36d9ff44;border-radius:50%;animation:pulse 4s ease-in-out infinite}.ring.r1{width:150px;height:150px}.ring.r2{width:240px;height:240px}.ring.r3{width:330px;height:330px}.phone{z-index:2;width:90px;height:170px;border:3px solid #dff8ff;border-radius:20px;background:#07121c;display:grid;place-items:center;box-shadow:0 0 45px #36d9ff55}.wifi{font-size:34px;color:var(--cyan)}.node{position:absolute;font-weight:700;font-size:11px;color:var(--muted)}.n1{top:20%;left:15%}.n2{top:18%;right:14%}.n3{bottom:20%;left:16%}.n4{bottom:18%;right:13%}
+@keyframes pulse{50%{transform:scale(1.04);opacity:.65}}
+.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:18px}.metric{padding:17px;border-radius:17px;border:1px solid var(--line);background:#0b1722}.metric span{color:var(--muted);font-size:10px;letter-spacing:.1em}.metric strong{display:block;font-size:30px;margin-top:4px}.cyan{border-top:2px solid var(--cyan)}.green{border-top:2px solid var(--green)}.amber{border-top:2px solid var(--amber)}.violet{border-top:2px solid var(--violet)}.blue{border-top:2px solid var(--blue)}
+.section-title{display:flex;align-items:end;justify-content:space-between;margin:34px 0 12px}.section-title h2{margin:0;font-size:25px}.section-title p{margin:0;color:var(--muted)}
+.journey{padding:25px}.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;position:relative}.step{padding:18px 14px;min-height:150px;background:#0a151f;border:1px solid var(--line);border-radius:16px;position:relative}.step.active{border-color:#39e58c88;box-shadow:inset 0 0 35px #39e58c0b}.step i{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#13283a;color:var(--cyan);font-style:normal;font-weight:800}.step h3{margin:12px 0 5px;font-size:13px}.step p{margin:0;color:var(--muted);font-size:12px}.arrow{position:absolute;right:-14px;top:31px;color:var(--green);z-index:2}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{padding:22px}.panel h3{margin:0 0 14px}.terminal{background:#050b10;border-radius:15px;border:1px solid #213440;padding:18px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;min-height:310px;color:#bfe9d2}.terminal .ok{color:var(--green)}.terminal .cmd{color:var(--cyan)}.terminal .warn{color:var(--amber)}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kv{padding:12px;border-radius:12px;background:#0a151f;border:1px solid var(--line)}.kv small{display:block;color:var(--muted)}.kv b{font-size:15px}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:760px}.table th,.table td{text-align:left;padding:12px;border-bottom:1px solid #1b2b38}.table th{color:var(--muted);font-size:10px;letter-spacing:.1em}.badge{padding:4px 8px;border-radius:999px;font-size:10px;background:#173044}.badge.open{color:var(--amber);background:#3b2b14}.badge.secure{color:var(--green);background:#103427}
+.arch{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.arch div{padding:20px;text-align:center;border:1px solid var(--line);border-radius:16px;background:#0b1722}.arch b{display:block;margin:8px 0}.arch span{color:var(--muted);font-size:11px}
+.boundary{padding:22px;border-left:3px solid var(--amber);background:#15140f;border-radius:12px;color:#d9c8a7}.footer{padding:45px 0 20px;color:var(--muted);text-align:center}
+@media(max-width:1000px){.hero{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}.steps,.arch{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
+@media(max-width:600px){.wrap{padding:14px}.metrics{grid-template-columns:1fr 1fr}.hero-main{padding:24px}.orbit{min-height:250px}.steps,.arch{grid-template-columns:1fr}h1{font-size:43px}.nav{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="brand" href="#"><div class="logo">⌁</div><div><b>WiFi Security Audit Lab</b><small>Wireless → LAN → Internet visibility</small></div></a>
+  <nav class="nav"><a href="#journey">Journey</a><a href="#wireless">Wireless</a><a href="#terminal">CLI</a><a href="#architecture">Architecture</a></nav>
+</header>
 
-*{box-sizing:border-box}
+<section class="hero">
+  <div class="card hero-main">
+    <div class="eyebrow">NETWORK VISIBILITY / AUTHORIZED ASSESSMENT</div>
+    <h1>From Wi‑Fi signal to internet.</h1>
+    <p>An interactive visual explanation of what happens when a phone enables Wi‑Fi, discovers an access point, associates, receives network configuration, reaches the gateway and uses the internet.</p>
+    <div class="cta"><a class="btn primary" href="#journey">Explore the journey →</a><a class="btn" href="#wireless">View wireless telemetry</a></div>
+  </div>
+  <div class="card orbit">
+    <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+    <div class="phone"><div class="wifi">◉</div></div>
+    <span class="node n1">2.4 GHz</span><span class="node n2">5 GHz</span><span class="node n3">ACCESS POINT</span><span class="node n4">INTERNET</span>
+  </div>
+</section>
 
-html{scroll-behavior:smooth}
+<section class="metrics">
+ <div class="metric cyan"><span>APs OBSERVED</span><strong id="aps">6</strong></div>
+ <div class="metric green"><span>OPEN NETWORKS</span><strong id="open">0</strong></div>
+ <div class="metric amber"><span>SECURED</span><strong id="secured">6</strong></div>
+ <div class="metric violet"><span>WPS ADVERTISED</span><strong id="wps">3</strong></div>
+ <div class="metric blue"><span>CLIENTS / DEVICES</span><strong>—</strong></div>
+ <div class="metric green"><span>SERVICES FOUND</span><strong>—</strong></div>
+</section>
 
-body{
-  margin:0;
-  background:
-    radial-gradient(circle at 80% 0%,rgba(32,217,255,.08),transparent 30%),
-    radial-gradient(circle at 20% 20%,rgba(165,108,255,.07),transparent 25%),
-    var(--bg);
-  color:var(--text);
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
+<section id="journey" class="card journey">
+ <div class="section-title"><div><h2>Wi‑Fi Journey</h2><p>PHONE → SIGNAL → ACCESS POINT → NETWORK → INTERNET</p></div></div>
+ <div class="steps">
+  <div class="step active"><i>1</i><h3>WI‑FI ENABLED</h3><p>Phone radio is enabled and ready to discover nearby networks.</p><b class="arrow">→</b></div>
+  <div class="step active"><i>2</i><h3>SCANNING</h3><p>Nearby access points advertise SSID, BSSID, channel and capabilities.</p><b class="arrow">→</b></div>
+  <div class="step active"><i>3</i><h3>NETWORK FOUND</h3><p>Select an authorized network and evaluate its signal and security profile.</p><b class="arrow">→</b></div>
+  <div class="step active"><i>4</i><h3>CONNECTED</h3><p>Association succeeds and the device obtains an IP configuration.</p><b class="arrow">→</b></div>
+  <div class="step active"><i>5</i><h3>INTERNET ACCESS</h3><p>Traffic flows through the gateway and DNS toward the internet.</p></div>
+ </div>
+</section>
 
-a{color:inherit;text-decoration:none}
+<section id="terminal" class="grid2">
+ <div class="card panel">
+  <h3>Live CLI / Bash layer</h3>
+  <div class="terminal">
+   <div class="cmd">root@wifi-audit:~# ./wifi-assess.sh</div>
+   <div>[+] Wi-Fi telemetry requested...</div><div class="ok">✓ Wireless scan available</div>
+   <div>[+] Reading SSID / BSSID / RSSI / frequency...</div><div class="ok">✓ 6 networks observed</div>
+   <div>[+] Association state...</div><div class="warn">! Current phone state: DISCONNECTED</div>
+   <div>[+] LAN discovery...</div><div class="warn">! Waiting for authorized Wi-Fi association</div>
+   <div class="cmd">root@wifi-audit:~# _</div>
+  </div>
+ </div>
+ <div class="card panel">
+  <h3>Connection cockpit</h3>
+  <div class="info">
+   <div class="kv"><small>SSID</small><b>— not connected</b></div><div class="kv"><small>BSSID</small><b>—</b></div>
+   <div class="kv"><small>FREQUENCY</small><b>—</b></div><div class="kv"><small>RSSI</small><b>—</b></div>
+   <div class="kv"><small>DEVICE IP</small><b>0.0.0.0</b></div><div class="kv"><small>GATEWAY</small><b>Unavailable</b></div>
+   <div class="kv"><small>DNS</small><b>Unavailable</b></div><div class="kv"><small>STATE</small><b>STOPPED_NOT_CONNECTED</b></div>
+  </div>
+ </div>
+</section>
 
-.app{
-  display:grid;
-  grid-template-columns:230px 1fr;
-  min-height:100vh;
-}
+<section id="wireless">
+ <div class="section-title"><div><h2>Wireless environment</h2><p>Observed telemetry — values are illustrative until live evidence is loaded.</p></div></div>
+ <div class="card panel table-wrap">
+  <table class="table"><thead><tr><th>SSID</th><th>BSSID</th><th>RSSI</th><th>FREQUENCY</th><th>BAND</th><th>SECURITY</th><th>WPS</th></tr></thead>
+  <tbody>
+   <tr><td>vivo V60e</td><td>26:e3:b2:5d:60:c0</td><td>-98 dBm</td><td>2472 MHz</td><td>2.4 GHz</td><td><span class="badge secure">WPA2</span></td><td>NO</td></tr>
+   <tr><td>om Sai net</td><td>30:de:4b:c8:40:1c</td><td>-94 dBm</td><td>2417 MHz</td><td>2.4 GHz</td><td><span class="badge secure">WPA2</span></td><td>YES</td></tr>
+   <tr><td>BruceWayne</td><td>d6:f8:81:35:79:f2</td><td>-89 dBm</td><td>5785 MHz</td><td>5 GHz</td><td><span class="badge secure">WPA2/WPA3</span></td><td>NO</td></tr>
+   <tr><td>182VISHALJIO5.0</td><td>3e:f8:7e:5c:7d:8b</td><td>-91 dBm</td><td>2412 MHz</td><td>2.4 GHz</td><td><span class="badge secure">WPA2</span></td><td>YES</td></tr>
+   <tr><td>OmkarChaitu</td><td>84:d8:1b:75:45:06</td><td>-96 dBm</td><td>2457 MHz</td><td>2.4 GHz</td><td><span class="badge secure">WPA2</span></td><td>YES</td></tr>
+   <tr><td>iPhone</td><td>4a:ca:d7:67:94:d7</td><td>-95 dBm</td><td>2437 MHz</td><td>2.4 GHz</td><td><span class="badge secure">WPA2</span></td><td>NO</td></tr>
+  </tbody></table>
+ </div>
+</section>
 
-.sidebar{
-  position:sticky;
-  top:0;
-  height:100vh;
-  padding:24px 16px;
-  border-right:1px solid var(--line);
-  background:rgba(4,10,15,.92);
-  backdrop-filter:blur(16px);
-}
+<section id="architecture">
+ <div class="section-title"><div><h2>Architecture</h2><p>What the phone actually traverses.</p></div></div>
+ <div class="arch">
+  <div>📱<b>Phone</b><span>Wi‑Fi radio + client</span></div><div>◉<b>Access Point</b><span>802.11 association</span></div><div>▣<b>LAN / Gateway</b><span>IP routing + DHCP</span></div><div>⌁<b>DNS</b><span>Name resolution</span></div><div>◎<b>Internet</b><span>External connectivity</span></div>
+ </div>
+</section>
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:32px;
-}
+<section style="margin-top:18px" class="boundary">
+ <b>Assessment boundary:</b> wireless observation and LAN discovery should only be performed on networks and systems you own or are explicitly authorized to assess. The public dashboard demonstrates the network journey; it does not claim that an observed SSID grants permission to access it.
+</section>
 
-.logo{
-  width:44px;
-  height:44px;
-  display:grid;
-  place-items:center;
-  border:1px solid var(--cyan);
-  border-radius:14px;
-  color:var(--cyan);
-  font-size:24px;
-  box-shadow:0 0 22px rgba(32,217,255,.18);
-}
-
-.brand strong{
-  display:block;
-  font-size:14px;
-}
-
-.brand small{
-  color:var(--muted);
-}
-
-.nav{
-  display:grid;
-  gap:7px;
-}
-
-.nav a{
-  padding:12px 13px;
-  border:1px solid transparent;
-  border-radius:10px;
-  color:#91aabb;
-  transition:.2s;
-}
-
-.nav a:hover,
-.nav a.active{
-  color:white;
-  border-color:#1b5b6d;
-  background:linear-gradient(90deg,rgba(32,217,255,.12),transparent);
-}
-
-.side-status{
+<footer class="footer">WiFi Security Audit Lab · Network visibility, evidence and authorized assessment</footer>
+</div>
+<script>
+const observed = [
+ {security:"WPA2",wps:false},{security:"WPA2",wps:true},{security:"WPA2/WPA3",wps:false},
+ {security:"WPA2",wps:true},{security:"WPA2",wps:true},{security:"WPA2",wps:false}
+];
+document.getElementById("aps").textContent=observed.length;
+document.getElementById("open").textContent=observed.filter(x=>String(x.security).startsWith("OPEN")).length;
+document.getElementById("secured").textContent=observed.filter(x=>!String(x.security).startsWith("OPEN")).length;
+document.getElementById("wps").textContent=observed.filter(x=>x.wps).length;
+</script>
+</body></html>.side-status{
   margin-top:30px;
   padding:16px;
   border:1px solid var(--line);
