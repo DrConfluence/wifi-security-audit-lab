@@ -37,6 +37,260 @@ h1{font-size:clamp(38px,6vw,76px);line-height:.98;margin:12px 0 18px;max-width:9
 .boundary{padding:22px;border-left:3px solid var(--amber);background:#15140f;border-radius:12px;color:#d9c8a7}.footer{padding:45px 0 20px;color:var(--muted);text-align:center}
 @media(max-width:1000px){.hero{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}.steps,.arch{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
 @media(max-width:600px){.wrap{padding:14px}.metrics{grid-template-columns:1fr 1fr}.hero-main{padding:24px}.orbit{min-height:250px}.steps,.arch{grid-template-columns:1fr}h1{font-size:43px}.nav{display:none}}
+
+/* =========================================================
+   v2.1 — NETWORK JOURNEY VISUAL SYSTEM
+   ========================================================= */
+
+.journey-v21{
+  padding:22px;
+}
+
+.network-path{
+  display:grid;
+  grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;
+  gap:10px;
+  align-items:center;
+  padding:18px 0;
+}
+
+.path-node{
+  position:relative;
+  min-height:150px;
+  padding:20px 14px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(32,217,255,.10),transparent 55%),
+    linear-gradient(145deg,#0d1d29,#071017);
+  text-align:center;
+  transition:.3s ease;
+}
+
+.path-node:hover{
+  transform:translateY(-3px);
+  border-color:var(--cyan);
+  box-shadow:0 12px 35px rgba(32,217,255,.10);
+}
+
+.path-node.active{
+  border-color:var(--cyan);
+  box-shadow:
+    0 0 0 1px rgba(32,217,255,.15),
+    0 0 35px rgba(32,217,255,.15);
+}
+
+.path-node.complete{
+  border-color:var(--green);
+}
+
+.path-icon{
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+.path-title{
+  font-weight:800;
+  letter-spacing:.04em;
+}
+
+.path-detail{
+  margin-top:6px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.path-arrow{
+  color:var(--cyan);
+  font-size:25px;
+  font-weight:800;
+  text-shadow:0 0 15px rgba(32,217,255,.5);
+}
+
+.packet{
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--cyan);
+  box-shadow:0 0 16px var(--cyan);
+  top:50%;
+  right:-5px;
+  opacity:0;
+}
+
+.path-node.active .packet{
+  animation:packetTravel 1.3s linear infinite;
+}
+
+@keyframes packetTravel{
+  0%{
+    opacity:0;
+    transform:translateX(-5px);
+  }
+  20%{
+    opacity:1;
+  }
+  80%{
+    opacity:1;
+  }
+  100%{
+    opacity:0;
+    transform:translateX(20px);
+  }
+}
+
+.journey-progress{
+  height:7px;
+  margin:15px 0 18px;
+  border-radius:99px;
+  background:#10202b;
+  overflow:hidden;
+}
+
+.journey-progress-fill{
+  height:100%;
+  width:43%;
+  border-radius:99px;
+  background:linear-gradient(
+    90deg,
+    var(--purple),
+    var(--cyan),
+    var(--green)
+  );
+  transition:width .5s ease;
+}
+
+.journey-controls-v21{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+}
+
+.journey-controls-v21 button{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:9px 14px;
+  background:#0d1e2b;
+  color:var(--text);
+  cursor:pointer;
+  font:inherit;
+  font-size:11px;
+}
+
+.journey-controls-v21 button:hover{
+  border-color:var(--cyan);
+}
+
+.journey-status{
+  margin-top:14px;
+  padding:11px 13px;
+  border-left:3px solid var(--cyan);
+  background:rgba(32,217,255,.045);
+  color:var(--muted);
+  font-size:11px;
+}
+
+.telemetry-grid{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:14px;
+  margin-top:16px;
+}
+
+.telemetry-box{
+  padding:18px;
+}
+
+.signal-strength{
+  display:flex;
+  align-items:end;
+  gap:4px;
+  height:55px;
+  margin-top:12px;
+}
+
+.signal-bar{
+  width:12px;
+  border-radius:3px 3px 0 0;
+  background:#172934;
+}
+
+.signal-bar:nth-child(1){height:18px}
+.signal-bar:nth-child(2){height:27px}
+.signal-bar:nth-child(3){height:36px}
+.signal-bar:nth-child(4){height:45px}
+.signal-bar:nth-child(5){height:54px}
+
+.signal-bar.on{
+  background:var(--green);
+  box-shadow:0 0 10px rgba(50,242,139,.25);
+}
+
+.frequency-spectrum{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+
+.frequency-card{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px;
+  background:#09151f;
+}
+
+.frequency-card strong{
+  display:block;
+  font-size:20px;
+}
+
+.frequency-card small{
+  color:var(--muted);
+}
+
+.cli-live{
+  margin-top:16px;
+  min-height:180px;
+  padding:16px;
+  border-radius:13px;
+  background:#03070a;
+  border:1px solid #142833;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:11px;
+  line-height:1.9;
+  overflow:auto;
+}
+
+.cli-line{
+  opacity:.45;
+}
+
+.cli-line.active{
+  opacity:1;
+  color:var(--green);
+}
+
+.cli-line::before{
+  content:"$ ";
+  color:var(--cyan);
+}
+
+@media(max-width:950px){
+  .network-path{
+    grid-template-columns:1fr;
+  }
+
+  .path-arrow{
+    transform:rotate(90deg);
+  }
+
+  .telemetry-grid{
+    grid-template-columns:1fr;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -140,6 +394,223 @@ document.getElementById("aps").textContent=observed.length;
 document.getElementById("open").textContent=observed.filter(x=>String(x.security).startsWith("OPEN")).length;
 document.getElementById("secured").textContent=observed.filter(x=>!String(x.security).startsWith("OPEN")).length;
 document.getElementById("wps").textContent=observed.filter(x=>x.wps).length;
+
+/* =========================================================
+   v2.1 — INTERACTIVE NETWORK JOURNEY
+   ========================================================= */
+
+const journeySteps = [
+  {
+    title:"Wi-Fi radio is ready",
+    association:"READY",
+    ip:"PENDING",
+    gateway:"PENDING",
+    dns:"PENDING"
+  },
+  {
+    title:"Scanning for access points",
+    association:"SCANNING",
+    ip:"PENDING",
+    gateway:"PENDING",
+    dns:"PENDING"
+  },
+  {
+    title:"Access point discovered",
+    association:"AP FOUND",
+    ip:"PENDING",
+    gateway:"PENDING",
+    dns:"PENDING"
+  },
+  {
+    title:"Association / authentication",
+    association:"ASSOCIATED",
+    ip:"PENDING",
+    gateway:"PENDING",
+    dns:"PENDING"
+  },
+  {
+    title:"DHCP assigns an IP address",
+    association:"ASSOCIATED",
+    ip:"IP ASSIGNED",
+    gateway:"PENDING",
+    dns:"PENDING"
+  },
+  {
+    title:"Gateway and DNS become reachable",
+    association:"CONNECTED",
+    ip:"IP ASSIGNED",
+    gateway:"REACHABLE",
+    dns:"RESOLVING"
+  },
+  {
+    title:"Internet path established",
+    association:"CONNECTED",
+    ip:"IP ASSIGNED",
+    gateway:"REACHABLE",
+    dns:"RESOLVED"
+  }
+];
+
+let journeyIndex = 0;
+let journeyTimer = null;
+
+function renderJourneyV21(){
+
+  const step = journeySteps[journeyIndex];
+
+  document.querySelectorAll("[data-path]").forEach(node => {
+
+    const index = Number(node.dataset.path);
+
+    node.classList.toggle(
+      "complete",
+      index < Math.min(journeyIndex,3)
+    );
+
+    node.classList.toggle(
+      "active",
+      index === Math.min(Math.floor(journeyIndex / 2),3)
+    );
+
+  });
+
+  const progress =
+    (journeyIndex / (journeySteps.length - 1)) * 100;
+
+  const progressEl =
+    document.getElementById("journeyProgress");
+
+  if(progressEl)
+    progressEl.style.width = progress + "%";
+
+  const status =
+    document.getElementById("journeyStatus");
+
+  if(status)
+    status.textContent =
+      `Step ${journeyIndex + 1} / ${journeySteps.length} — ${step.title}.`;
+
+  const setJourney = (id,value) => {
+
+    const el=document.getElementById(id);
+
+    if(el)
+      el.textContent=value;
+  };
+
+  setJourney("journeyAssociation",step.association);
+  setJourney("journeyIp",step.ip);
+  setJourney("journeyGateway",step.gateway);
+  setJourney("journeyDns",step.dns);
+
+  document.querySelectorAll(".cli-line").forEach((line,i)=>{
+    line.classList.toggle(
+      "active",
+      i <= journeyIndex + 1
+    );
+  });
+}
+
+function journeyNext(){
+
+  if(journeyIndex < journeySteps.length - 1){
+    journeyIndex++;
+    renderJourneyV21();
+  }
+}
+
+function journeyPlay(){
+
+  clearInterval(journeyTimer);
+
+  journeyIndex=0;
+  renderJourneyV21();
+
+  journeyTimer=setInterval(()=>{
+
+    if(journeyIndex >= journeySteps.length - 1){
+      clearInterval(journeyTimer);
+      return;
+    }
+
+    journeyIndex++;
+    renderJourneyV21();
+
+  },1000);
+}
+
+function journeyReset(){
+
+  clearInterval(journeyTimer);
+
+  journeyIndex=0;
+  renderJourneyV21();
+}
+
+renderJourneyV21();
+
+/*
+ * Keep live telemetry truthful.
+ * Demonstration journey != proof of current connectivity.
+ */
+
+function updateJourneyTelemetry(){
+
+  const source =
+    document.getElementById("cRssi");
+
+  const target =
+    document.getElementById("journeyRssi");
+
+  const signal =
+    document.getElementById("journeySignal");
+
+  if(!target)
+    return;
+
+  if(source && source.textContent !== "—"){
+
+    target.textContent=source.textContent;
+
+  }else{
+
+    target.textContent="Unavailable";
+  }
+
+  if(signal){
+
+    const bars =
+      signal.querySelectorAll(".signal-bar");
+
+    bars.forEach(x=>x.classList.remove("on"));
+
+    const value =
+      source
+        ? parseInt(source.textContent,10)
+        : NaN;
+
+    if(Number.isFinite(value)){
+
+      const level =
+        Math.max(
+          1,
+          Math.min(
+            5,
+            Math.round((value + 100) / 10)
+          )
+        );
+
+      bars.forEach((bar,i)=>{
+        if(i < level)
+          bar.classList.add("on");
+      });
+
+    }
+  }
+}
+
+setTimeout(updateJourneyTelemetry,500);
+
 </script>
 </body></html>.side-status{
   margin-top:30px;
@@ -662,7 +1133,143 @@ th{
     </div>
   </section>
 
-  <section class="section" id="networks">
+  
+<section class="section" id="network-operations">
+
+  <div class="section-head">
+    <div>
+      <h2>Network Operations</h2>
+      <span>interactive connectivity walkthrough</span>
+    </div>
+    <span id="journeyMode">DEMONSTRATION</span>
+  </div>
+
+  <div class="journey-v21">
+
+    <div class="network-path">
+
+      <div class="path-node active" data-path="0">
+        <div class="path-icon">📱</div>
+        <div class="path-title">PHONE</div>
+        <div class="path-detail">Wi-Fi radio enabled</div>
+        <span class="packet"></span>
+      </div>
+
+      <div class="path-arrow">→</div>
+
+      <div class="path-node" data-path="1">
+        <div class="path-icon">📡</div>
+        <div class="path-title">ACCESS POINT</div>
+        <div class="path-detail">802.11 association</div>
+        <span class="packet"></span>
+      </div>
+
+      <div class="path-arrow">→</div>
+
+      <div class="path-node" data-path="2">
+        <div class="path-icon">🧭</div>
+        <div class="path-title">GATEWAY</div>
+        <div class="path-detail">DHCP + routing</div>
+        <span class="packet"></span>
+      </div>
+
+      <div class="path-arrow">→</div>
+
+      <div class="path-node" data-path="3">
+        <div class="path-icon">☁️</div>
+        <div class="path-title">INTERNET</div>
+        <div class="path-detail">DNS + HTTPS</div>
+      </div>
+
+    </div>
+
+    <div class="journey-progress">
+      <div class="journey-progress-fill" id="journeyProgress"></div>
+    </div>
+
+    <div class="journey-status" id="journeyStatus">
+      Step 1 / 7 — Wi-Fi radio is ready to discover networks.
+    </div>
+
+    <div class="journey-controls-v21">
+      <button type="button" onclick="journeyPlay()">▶ Play walkthrough</button>
+      <button type="button" onclick="journeyNext()">Next step →</button>
+      <button type="button" onclick="journeyReset()">↺ Reset</button>
+    </div>
+
+    <div class="telemetry-grid">
+
+      <div class="section telemetry-box">
+        <h3>Signal / RF intelligence</h3>
+
+        <div class="kv">
+          <small>RSSI</small>
+          <strong id="journeyRssi">—</strong>
+        </div>
+
+        <div class="signal-strength" id="journeySignal">
+          <span class="signal-bar"></span>
+          <span class="signal-bar"></span>
+          <span class="signal-bar"></span>
+          <span class="signal-bar"></span>
+          <span class="signal-bar"></span>
+        </div>
+
+        <div class="frequency-spectrum">
+          <div class="frequency-card">
+            <small>2.4 GHz</small>
+            <strong>Wi-Fi</strong>
+          </div>
+
+          <div class="frequency-card">
+            <small>5 GHz</small>
+            <strong>Wi-Fi</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="section telemetry-box">
+        <h3>Connectivity chain</h3>
+
+        <div class="kv">
+          <small>ASSOCIATION</small>
+          <strong id="journeyAssociation">READY</strong>
+        </div>
+
+        <div class="kv">
+          <small>DHCP / IP</small>
+          <strong id="journeyIp">PENDING</strong>
+        </div>
+
+        <div class="kv">
+          <small>GATEWAY</small>
+          <strong id="journeyGateway">PENDING</strong>
+        </div>
+
+        <div class="kv">
+          <small>DNS / INTERNET</small>
+          <strong id="journeyDns">PENDING</strong>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cli-live" id="journeyCli">
+      <div class="cli-line active">wifi-assess --dashboard</div>
+      <div class="cli-line">initializing wireless radio...</div>
+      <div class="cli-line">scanning access points...</div>
+      <div class="cli-line">normalizing SSID / BSSID / RSSI...</div>
+      <div class="cli-line">evaluating security capabilities...</div>
+      <div class="cli-line">checking association state...</div>
+      <div class="cli-line">requesting network configuration...</div>
+      <div class="cli-line">resolving gateway and DNS...</div>
+      <div class="cli-line">verifying Internet path...</div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="networks">
 
     <div class="section-head">
       <h2>Wireless Environment</h2>
