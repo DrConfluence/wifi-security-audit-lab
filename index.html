@@ -418,11 +418,29 @@ async function loadPhase6(){
   document.getElementById("p67hosts").textContent=a.hosts_observed??0;
   document.getElementById("p67services").textContent=sv.services_observed??0;
   document.getElementById("p67aps").textContent=w.networks_observed??0;
-  document.getElementById("p67network").textContent=n.ssid||"NOT_CONNECTED";
-  document.getElementById("p67ip").textContent=n.device_ip||"0.0.0.0";
-  document.getElementById("p67rssi").textContent=n.rssi??"—";
+
+  const telemetryAvailable =
+    d.network_status !== "telemetry_unavailable" &&
+    n.ssid &&
+    n.ssid !== "<unknown ssid>";
+
+  document.getElementById("p67network").textContent =
+    telemetryAvailable ? n.ssid : "UNAVAILABLE";
+
+  document.getElementById("p67ip").textContent =
+    telemetryAvailable && n.device_ip ? n.device_ip : "—";
+
+  document.getElementById("p67rssi").textContent =
+    telemetryAvailable && Number.isFinite(n.rssi) && n.rssi > -127
+      ? n.rssi + " dBm"
+      : "—";
+
   document.getElementById("p67generated").textContent=d.generated_at||"—";
-  document.getElementById("p67status").textContent="[ OK ] assessment telemetry loaded";
+
+  document.getElementById("p67status").textContent =
+    telemetryAvailable
+      ? "[ OK ] assessment evidence loaded"
+      : "[ OK ] assessment evidence loaded | [ INFO ] connection telemetry unavailable";
 
   p67Rows("p67assets",(a.hosts||[]).map(h=>{
    const addr=(h.addresses||[]).find(x=>x.type==="ipv4");
