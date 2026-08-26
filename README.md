@@ -58,3 +58,36 @@ Passive discovery does not prove that a network or device is vulnerable. Active 
 ## Security Principle
 
 The goal is not to maximize the number of networks marked authorized. The goal is to demonstrate that the assessor can operate in a real environment while maintaining a defensible authorization boundary and producing reliable evidence.
+
+## LAB-001 — Real Device Progress
+
+LAB-001 has progressed beyond synthetic demonstration data into a real Android/Termux assessment workflow.
+
+### Validated on Android / Termux
+
+- Real Wi-Fi discovery through Termux:API
+- SSID, BSSID, RSSI, frequency and security capability collection
+- Real AP observation: 13 networks in one captured scan
+- Authorized LAN host discovery using Nmap
+- Authorized target network: `172.22.25.0/24`
+- Device IP observed during the assessment: `172.22.25.69`
+- Additional live host observed: `172.22.25.133`
+- TCP/53 reachable on the observed host
+- Service identification: `dnsmasq 2.51`
+- JSON, XML and TXT evidence generation
+- Live assessment and authorized inventory modules
+- 61 automated tests passing
+- Python compilation passing
+- Shell syntax validation passing
+
+### Platform limitations discovered
+
+Android/Termux does not expose unrestricted Linux networking to the application environment. Direct `ip route`, `ip neigh` and `/proc/net/*` access can return permission errors.
+
+Termux:API Wi-Fi scanning also requires Android Location to be enabled. The project records these conditions instead of fabricating network information.
+
+### Assessment boundary
+
+Wireless visibility is observation only. LAN inventory is performed only inside an explicitly authorized assessment scope. The project does not treat discovery of an SSID as authorization to access it.
+
+See [`wiki/`](wiki/Home.md) for the technical documentation and assessment methodology.

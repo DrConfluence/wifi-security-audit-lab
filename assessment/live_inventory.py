@@ -279,7 +279,16 @@ def service_snapshot(ip):
     return results
 
 
-def discover_lan(ip, max_hosts=254):
+def discover_lan(ip, max_hosts=32):
+    """
+    Bounded LAN discovery.
+
+    Prefer the OS neighbor table. If it contains usable entries, return
+    those observations without generating a large serial ping sweep.
+
+    When a sweep is necessary, limit it to a small host window so an
+    Android/Termux assessment cannot hang for minutes.
+    """
     network = subnet_from_ip(ip)
 
     if not network:
@@ -288,13 +297,15 @@ def discover_lan(ip, max_hosts=254):
             "reason": "Could not determine IPv4 LAN",
         }
 
-    hosts = list(network.hosts())[:max_hosts]
+    hosts = list(network.hosts())
+
+    # Never launch an uncontrolled 254-host serial sweep on Android.
+    hosts = hosts[:max_hosts]
 
     discovered = []
 
-    # Bounded, ordinary reachability discovery.
     for host in hosts:
-        result = ping_host(host)
+        result = ping_host(host, timeout=0.25)
 
         if result["reachable"]:
             discovered.append({
@@ -307,9 +318,9 @@ def discover_lan(ip, max_hosts=254):
         "available": True,
         "network": str(network),
         "hosts_tested": len(hosts),
+        "bounded": True,
         "reachable_hosts": discovered,
     }
-
 
 def enrich_with_neighbors(discovery, neighbors):
     by_ip = {
