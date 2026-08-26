@@ -7,6 +7,7 @@ from pathlib import Path
 from assessment.engine import run_assessment
 from assessment.report import build_report, write_report
 from assessment.findings import generate_findings
+from assessment.executive import build_executive_summary
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 RUN_DIR = BASE_DIR / "evidence"
@@ -47,6 +48,8 @@ def run_end_to_end(
     )
 
     report["findings"] = findings
+
+report["executive"] = build_executive_summary(report)
 
     report["workflow"] = {
         "started_at": started,

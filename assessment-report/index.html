@@ -1,187 +1,402 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-
 <meta charset="utf-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1">
+<title>Wi-Fi Security Assessment</title>
 
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box}
 
-<title>
-  Assessment Case Study | Wi-Fi Security Lab
-</title>
+body{
+  margin:0;
+  background:#0a0f1c;
+  color:#edf2f7;
+  font-family:
+    system-ui,-apple-system,BlinkMacSystemFont,
+    "Segoe UI",sans-serif;
+}
 
-<link
-  rel="stylesheet"
-  href="../assets/style.css">
+main{
+  width:min(1100px,94%);
+  margin:auto;
+  padding:24px 0 60px;
+}
 
+header{
+  border-bottom:1px solid #26344d;
+  padding-bottom:20px;
+  margin-bottom:20px;
+}
+
+h1{margin:0 0 6px;font-size:30px}
+h2{margin-top:0}
+
+.muted{color:#91a0b8}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.card{
+  background:#111a2b;
+  border:1px solid #26344d;
+  border-radius:14px;
+  padding:18px;
+  margin:14px 0;
+}
+
+.metric{
+  font-size:25px;
+  font-weight:700;
+  margin-top:6px;
+}
+
+.label{
+  color:#91a0b8;
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:7px;
+  background:#26344d;
+  font-size:12px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:10px;
+  border-bottom:1px solid #26344d;
+  text-align:left;
+}
+
+.good{color:#8ee6b0}
+.warn{color:#f1d27a}
+.bad{color:#ff9b9b}
+
+pre{
+  white-space:pre-wrap;
+  overflow:auto;
+  background:#080d17;
+  padding:14px;
+  border-radius:10px;
+}
+
+@media(max-width:800px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:500px){
+  main{width:92%}
+  .grid{grid-template-columns:1fr}
+  h1{font-size:24px}
+}
+</style>
 </head>
 
 <body>
-
-<header class="nav">
-
-  <a class="brand" href="../">
-    DrConfluence<span>/security</span>
-  </a>
-
-  <nav>
-    <a href="../">Home</a>
-    <a href="https://github.com/DrConfluence/wifi-security-audit-lab">
-      Repository
-    </a>
-  </nav>
-
-</header>
-
-
 <main>
 
-<section class="hero">
+<header>
+  <h1>Wi-Fi Security Assessment</h1>
+  <div class="muted">
+    Authorization-aware wireless security assessment platform
+  </div>
+</header>
 
-  <p class="eyebrow">
-    SANITIZED CASE STUDY
-  </p>
+<section class="grid">
 
-  <h1>
-    Controlled Wi-Fi Assessment
-  </h1>
+<div class="card">
+<div class="label">Assessment</div>
+<div class="metric" id="assessment">—</div>
+</div>
 
-  <p class="lead">
-    A presentation-ready example of how a real engagement
-    should be documented without publishing third-party
-    network data.
-  </p>
+<div class="card">
+<div class="label">Overall</div>
+<div class="metric" id="overall">—</div>
+</div>
 
-</section>
+<div class="card">
+<div class="label">Connection</div>
+<div class="metric" id="connection">—</div>
+</div>
 
-
-<section>
-
-<h2>1. Authorization</h2>
-
-<p>
-Written authorization reference:
-<code>LAB-001</code> (example only).
-</p>
-
-<p>
-Scope:
-controlled laboratory network owned by the assessor.
-</p>
-
-</section>
-
-
-<section>
-
-<h2>2. Discovery</h2>
-
-<p>
-The scanner records SSID, BSSID, capabilities, signal level,
-frequency, band, channel, timestamp, and a unique scan identifier.
-</p>
-
-</section>
-
-
-<section>
-
-<h2>3. Authorization verification</h2>
-
-<p>
-Observed networks are compared against the explicit allowlist.
-A visible network that is absent from the allowlist remains
-unauthorized for the purposes of the assessment.
-</p>
-
-</section>
-
-
-<section>
-
-<h2>4. Evidence</h2>
-
-<pre><code>Scan ID:             20260825-LAB-001
-Networks observed:  6
-Authorized:         1
-Out of scope:       5
-Status:             PASSIVE DISCOVERY COMPLETE</code></pre>
-
-</section>
-
-
-<section>
-
-<h2>5. Active testing boundary</h2>
-
-<p>
-No password guessing, credential extraction, deauthentication,
-authentication bypass, or unauthorized association is performed
-by this project.
-</p>
-
-<p>
-Any further testing requires explicit written scope.
-</p>
-
-</section>
-
-
-<section>
-
-<h2>6. Finding format</h2>
-
-<div class="grid">
-
-<article>
-<b>Observation</b>
-<p>
-What was actually observed.
-</p>
-</article>
-
-<article>
-<b>Impact</b>
-<p>
-Why the observation matters to the authorized environment.
-</p>
-</article>
-
-<article>
-<b>Evidence</b>
-<p>
-Timestamped, reproducible evidence supporting the finding.
-</p>
-</article>
-
-<article>
-<b>Recommendation</b>
-<p>
-A defensive remediation or control improvement.
-</p>
-</article>
-
+<div class="card">
+<div class="label">Authorization</div>
+<div class="metric" id="authorization">—</div>
 </div>
 
 </section>
 
+<section class="card">
+<h2>Target</h2>
+
+<table>
+<tr>
+<th>SSID</th>
+<td id="ssid">—</td>
+</tr>
+
+<tr>
+<th>BSSID</th>
+<td id="bssid">—</td>
+</tr>
+
+<tr>
+<th>Authorization reference</th>
+<td id="auth">—</td>
+</tr>
+</table>
+</section>
+
+<section class="card">
+<h2>Phase 1 — Connectivity</h2>
+
+<table>
+<tr>
+<th>Connection state</th>
+<td id="state">—</td>
+</tr>
+
+<tr>
+<th>Gateway</th>
+<td id="gateway">—</td>
+</tr>
+
+<tr>
+<th>Gateway validation</th>
+<td id="gatewayStatus">—</td>
+</tr>
+</table>
+</section>
+
+<section class="card">
+<h2>Phase 2 — Services</h2>
+
+<div class="grid">
+<div>
+<div class="label">Tested</div>
+<div class="metric" id="tested">0</div>
+</div>
+
+<div>
+<div class="label">Reachable</div>
+<div class="metric" id="reachable">0</div>
+</div>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Port</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="services">
+<tr>
+<td colspan="3">No service data</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<section class="card">
+<h2>Findings</h2>
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Severity</th>
+<th>Finding</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody id="findings">
+<tr>
+<td colspan="4">No findings</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<section class="card">
+<h2>Executive Assessment</h2>
+
+<p id="statement" class="muted">
+No assessment report loaded.
+</p>
+
+<pre id="limitations">
+Platform limitations will appear here.
+</pre>
+</section>
+
+<section class="card">
+<h2>Methodology</h2>
+
+<p>
+Discovery → authorization → session → connectivity →
+gateway validation → scoped service validation →
+findings → evidence → report.
+</p>
+
+<p class="muted">
+Visibility of a wireless network does not itself establish
+authorization. The platform records unavailable Android
+telemetry as unavailable instead of treating it as successful
+access.
+</p>
+</section>
+
 </main>
 
+<script>
+const params = new URLSearchParams(location.search);
+const source = params.get("report");
 
-<footer>
+function setText(id,value){
+  document.getElementById(id).textContent =
+    value === undefined || value === null
+    ? "—"
+    : value;
+}
 
-<span>
-Sanitized example — no real third-party network data
-</span>
+function statusClass(value){
+  if(value === "PASS" ||
+     value === "VERIFIED" ||
+     value === "PARTIAL")
+    return "good";
 
-<a href="../">
-Back to lab
-</a>
+  if(value === "BLOCKED" ||
+     value === "FAIL")
+    return "bad";
 
-</footer>
+  return "warn";
+}
+
+function badge(value){
+  const cls = statusClass(value);
+  return `<span class="badge ${cls}">${value || "UNKNOWN"}</span>`;
+}
+
+if(source){
+
+fetch(source)
+.then(r => r.json())
+.then(report => {
+
+  const target = report.target || {};
+  const auth = report.authorization || {};
+  const p1 = report.phase_1 || {};
+  const p2 = report.phase_2 || {};
+  const executive = report.executive || {};
+  const findings = report.findings || [];
+  const services = p2.results || [];
+
+  setText("assessment",report.assessment_id);
+  setText("overall",executive.overall_status);
+  setText("connection",p1.connection_state);
+  setText("authorization",auth.status);
+
+  setText("ssid",target.ssid);
+  setText("bssid",target.bssid);
+  setText("auth",auth.reference);
+
+  setText("state",p1.connection_state);
+  setText("gateway",p1.gateway);
+  setText("gatewayStatus",p1.gateway_status);
+
+  setText("tested",p2.services_tested || 0);
+  setText("reachable",p2.services_reachable || 0);
+
+  const serviceBody =
+    document.getElementById("services");
+
+  serviceBody.innerHTML = "";
+
+  if(!services.length){
+    serviceBody.innerHTML =
+      "<tr><td colspan='3'>No Phase-2 data</td></tr>";
+  }else{
+    services.forEach(item => {
+      serviceBody.innerHTML +=
+        "<tr>" +
+        "<td>" + (item.service || "UNKNOWN") + "</td>" +
+        "<td>" + (item.port || "—") + "</td>" +
+        "<td>" + badge(item.status) + "</td>" +
+        "</tr>";
+    });
+  }
+
+  const findingsBody =
+    document.getElementById("findings");
+
+  findingsBody.innerHTML = "";
+
+  if(!findings.length){
+    findingsBody.innerHTML =
+      "<tr><td colspan='4'>No findings</td></tr>";
+  }else{
+    findings.forEach(item => {
+      findingsBody.innerHTML +=
+        "<tr>" +
+        "<td>" + item.id + "</td>" +
+        "<td>" + item.severity + "</td>" +
+        "<td>" + item.title + "</td>" +
+        "<td>" + badge(item.status) + "</td>" +
+        "</tr>";
+    });
+  }
+
+  setText(
+    "statement",
+    executive.assessment_statement
+  );
+
+  document.getElementById("limitations").textContent =
+    "If Android/Termux does not expose routing or " +
+    "connection telemetry, the assessment records " +
+    "NOT_AVAILABLE rather than inferring connectivity.";
+
+})
+.catch(error => {
+  setText(
+    "overall",
+    "REPORT ERROR"
+  );
+
+  document.getElementById(
+    "limitations"
+  ).textContent = String(error);
+});
+
+}else{
+
+setText(
+  "overall",
+  "NO REPORT"
+);
+
+document.getElementById(
+  "limitations"
+).textContent =
+  "Open this dashboard with ?report=<assessment-report.json>";
+}
+</script>
 
 </body>
 </html>
