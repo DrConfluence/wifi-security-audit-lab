@@ -91,3 +91,8 @@ Termux:API Wi-Fi scanning also requires Android Location to be enabled. The proj
 Wireless visibility is observation only. LAN inventory is performed only inside an explicitly authorized assessment scope. The project does not treat discovery of an SSID as authorization to access it.
 
 See [`wiki/`](wiki/Home.md) for the technical documentation and assessment methodology.
+
+
+## Web Dashboard
+
+The interactive project dashboard is available through `index.html` and the GitHub Pages deployment. The repository wiki documentation is under [`wiki/`](wiki/Home.md).

@@ -1,235 +1,333 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Authorization-aware Wi-Fi security assessment lab by DrConfluence.">
-  <title>Wi-Fi Security Assessment Lab | DrConfluence</title>
-  <link rel="stylesheet" href="assets/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050805">
+<title>Wi-Fi Security Audit Lab | LAB-001</title>
+<style>
+:root{
+  --bg:#050805;
+  --panel:#0a110a;
+  --panel2:#0d160d;
+  --line:#19331b;
+  --green:#39ff88;
+  --green2:#20c967;
+  --text:#d9f7df;
+  --muted:#76917d;
+  --amber:#ffd166;
+  --red:#ff5c70;
+  --cyan:#57d9ff;
+  --shadow:0 0 35px rgba(57,255,136,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:radial-gradient(circle at top,#0b180d 0,#050805 42%,#030503 100%);
+  color:var(--text);font:15px/1.65 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace
+}
+a{color:var(--green);text-decoration:none}
+a:hover{text-decoration:underline}
+header{
+  position:sticky;top:0;z-index:20;background:rgba(5,8,5,.92);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)
+}
+.nav{max-width:1200px;margin:auto;padding:12px 18px;display:flex;gap:16px;align-items:center;overflow:auto}
+.brand{font-weight:800;white-space:nowrap;color:var(--green)}
+.nav a{color:#9ab9a1;white-space:nowrap;font-size:13px}
+.nav a:hover{color:var(--green)}
+main{max-width:1200px;margin:auto;padding:24px 18px 70px}
+.hero{
+  border:1px solid var(--line);background:linear-gradient(145deg,#0b150c,#071007);
+  box-shadow:var(--shadow);padding:28px;border-radius:14px;position:relative;overflow:hidden
+}
+.hero:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 23px,rgba(57,255,136,.025) 24px);pointer-events:none}
+.prompt{color:var(--green);font-size:13px}
+h1{font-size:clamp(28px,6vw,54px);line-height:1.05;margin:10px 0}
+h2{color:var(--green);font-size:20px;margin-top:42px}
+h3{font-size:15px;color:var(--cyan)}
+.subtitle{color:#9ab9a1;max-width:850px}
+.cursor{display:inline-block;width:9px;height:18px;background:var(--green);vertical-align:-3px;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:0}}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+.card{
+  border:1px solid var(--line);background:rgba(10,17,10,.88);padding:18px;border-radius:10px;
+  box-shadow:var(--shadow)
+}
+.metric{font-size:28px;font-weight:800;color:var(--green)}
+.label{font-size:12px;color:var(--muted);margin-top:3px}
+.status{color:var(--green)}
+.warn{color:var(--amber)}
+.danger{color:var(--red)}
+section{scroll-margin-top:70px}
+.terminal{
+  border:1px solid #214925;border-radius:10px;overflow:hidden;background:#020502;
+  box-shadow:var(--shadow);margin:16px 0
+}
+.termbar{background:#0c170d;padding:8px 12px;color:var(--muted);border-bottom:1px solid var(--line)}
+.termout{padding:16px;white-space:pre-wrap;overflow:auto;color:#bdeec8}
+.promptline{color:var(--green)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line)}
+th{color:var(--green);position:sticky;top:0;background:#0a110a}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+.badge{display:inline-block;border:1px solid var(--line);padding:3px 8px;border-radius:99px;font-size:11px}
+button{
+  font:inherit;background:#0a180c;color:var(--green);border:1px solid #25582c;
+  padding:8px 11px;border-radius:7px;cursor:pointer
+}
+button:hover{background:#102314}
+.command{display:flex;gap:8px;align-items:center}
+.command code{flex:1;overflow:auto;white-space:nowrap;color:#c8f8d0}
+details{border:1px solid var(--line);border-radius:9px;margin:10px 0;background:#081008}
+summary{cursor:pointer;padding:12px;color:var(--green)}
+details>div{padding:0 14px 14px;color:#9ab9a1}
+.timeline{border-left:2px solid #214925;margin:20px 0;padding-left:20px}
+.event{margin:20px 0}.event b{color:var(--green)}
+footer{border-top:1px solid var(--line);margin-top:60px;padding-top:25px;color:var(--muted);font-size:12px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.hero{padding:20px}table{min-width:760px}}
+@media(max-width:480px){.grid{grid-template-columns:1fr}.nav{gap:12px}main{padding:14px 10px 50px}}
+</style>
 </head>
-
 <body>
-
-<header class="nav">
-  <a class="brand" href="./">
-    DrConfluence<span>/security</span>
-  </a>
-
-  <nav>
-    <a href="#capabilities">Capabilities</a>
-    <a href="#methodology">Methodology</a>
-    <a href="#evidence">Evidence</a>
-    <a href="assessment-report/">Case Study</a>
-  </nav>
+<header>
+<nav class="nav">
+  <span class="brand">root@wifi-audit:~$</span>
+  <a href="#status">status</a>
+  <a href="#wifi">wifi</a>
+  <a href="#lan">lan</a>
+  <a href="#services">services</a>
+  <a href="#evidence">evidence</a>
+  <a href="#architecture">architecture</a>
+  <a href="#roadmap">roadmap</a>
+  <a href="https://github.com/DrConfluence/wifi-security-audit-lab">github</a>
+</nav>
 </header>
 
 <main>
-
-<section class="hero">
-
-  <p class="eyebrow">
-    WIRELESS SECURITY • TERMUX • DEFENSIVE ASSESSMENT
+<section class="hero" id="status">
+  <div class="prompt">root@termux:~/wifi-audit$ ./wifi-assess.sh --status LAB-001</div>
+  <h1>Wi-Fi Security<br>Audit Lab</h1>
+  <p class="subtitle">
+    Real Android/Termux wireless discovery → authorized LAN inventory →
+    service assessment → machine-readable evidence.
   </p>
-
-  <h1>
-    Wi-Fi Security<br>
-    <span>Assessment Lab</span>
-  </h1>
-
-  <p class="lead">
-    An authorization-aware passive assessment workflow
-    for controlled real-world security exercises.
-  </p>
-
-  <div class="actions">
-    <a class="button"
-       href="https://github.com/DrConfluence/wifi-security-audit-lab">
-       View GitHub
-    </a>
-
-    <a class="button secondary"
-       href="assessment-report/">
-       View Case Study
-    </a>
-  </div>
-
-  <div class="notice">
-    <strong>Authorization boundary:</strong>
-    Network visibility is not authorization.
-    Only explicitly approved networks are treated as in-scope.
-  </div>
-
+  <p><span class="status">● LAB-001 ENGINEERING CHECKPOINT ONLINE</span> <span class="cursor"></span></p>
 </section>
 
+<div class="grid">
+  <div class="card"><div class="metric">13</div><div class="label">REAL APs OBSERVED</div></div>
+  <div class="card"><div class="metric">2</div><div class="label">LAN HOSTS OBSERVED</div></div>
+  <div class="card"><div class="metric">61</div><div class="label">AUTOMATED TESTS PASSING</div></div>
+  <div class="card"><div class="metric">1</div><div class="label">OPEN TCP SERVICE IDENTIFIED</div></div>
+</div>
 
-<section id="capabilities">
+<section id="wifi">
+<h2>01 // REAL WI-FI DISCOVERY</h2>
+<div class="terminal">
+<div class="termbar">Termux session · termux-wifi-scaninfo</div>
+<div class="termout"><span class="promptline">$ termux-wifi-scaninfo | jq</span>
 
-  <p class="eyebrow">CAPABILITIES</p>
+REAL DEVICE OBSERVATION
+Networks observed: 13
+Fields: SSID / BSSID / RSSI / frequency / bandwidth / capabilities
 
-  <h2>What the lab demonstrates</h2>
+The project records Android-exposed telemetry rather than fabricating
+radio observations.</div>
+</div>
 
-  <div class="grid">
-
-    <article>
-      <b>Passive discovery</b>
-      <p>
-        Collects Wi-Fi metadata through Termux:API
-        without attempting authentication.
-      </p>
-    </article>
-
-    <article>
-      <b>Security classification</b>
-      <p>
-        Classifies observed capabilities as WPA3,
-        WPA2, WPA, WEP, OPEN, or UNKNOWN.
-      </p>
-    </article>
-
-    <article>
-      <b>Authorization matching</b>
-      <p>
-        Separates observed networks from the
-        operator-maintained authorized scope.
-      </p>
-    </article>
-
-    <article>
-      <b>Evidence preservation</b>
-      <p>
-        Produces structured CSV and JSON records
-        with scan IDs and timestamps.
-      </p>
-    </article>
-
-    <article>
-      <b>Automated validation</b>
-      <p>
-        Regression tests protect assessment logic
-        against accidental changes.
-      </p>
-    </article>
-
-    <article>
-      <b>Operational discipline</b>
-      <p>
-        Real observations and authorization records
-        are excluded from the public repository.
-      </p>
-    </article>
-
-  </div>
-
+<div class="tablewrap">
+<table>
+<thead><tr><th>SSID</th><th>BSSID</th><th>Band</th><th>RSSI</th><th>Security</th><th>WPS</th></tr></thead>
+<tbody>
+<tr><td>Shubh</td><td>32:93:58:39:45:b7</td><td>2.4 GHz</td><td>-69</td><td>WPA2</td><td>NO</td></tr>
+<tr><td>vivo V30e</td><td>de:ce:49:04:6b:2b</td><td>2.4 GHz</td><td>-96</td><td>WPA2</td><td>NO</td></tr>
+<tr><td>182VISHALJIO5.0</td><td>3e:f8:7e:5c:7d:8b</td><td>2.4 GHz</td><td>-94</td><td>WPA2</td><td>YES</td></tr>
+<tr><td>Desai</td><td>7e:b0:de:5a:92:e6</td><td>2.4 GHz</td><td>-97</td><td>WPA2</td><td>YES</td></tr>
+<tr><td>Thechavadapav-2.4G</td><td>54:a2:45:3f:5d:75</td><td>2.4 GHz</td><td>-96</td><td>WPA/WPA2</td><td>NO</td></tr>
+<tr><td>JioAirfiberA6</td><td>20:b5:c6:04:38:64</td><td>5 GHz</td><td>-94</td><td>WPA2</td><td>NO</td></tr>
+<tr><td>OmkarChaitu</td><td>84:d8:1b:75:45:06</td><td>2.4 GHz</td><td>-86</td><td>WPA2</td><td>YES</td></tr>
+<tr><td>W00_1875495768</td><td>4c:01:14:c3:85:7f</td><td>2.4 GHz</td><td>-98</td><td>WPA2</td><td>NO</td></tr>
+<tr><td>RH-2.4G-DDF7D0</td><td>44:95:3b:dd:f7:d0</td><td>2.4 GHz</td><td>-84</td><td>WPA/WPA2</td><td>YES</td></tr>
+<tr><td>MULTIPOINT@4.11</td><td>78:9a:18:8f:50:42</td><td>5 GHz</td><td>-88</td><td>OPEN/UNSPECIFIED</td><td>NO</td></tr>
+</tbody>
+</table>
+</div>
+<p class="label">The captured evidence set contained 13 networks; the table highlights the primary observed records.</p>
 </section>
 
+<section id="lan">
+<h2>02 // AUTHORIZED LAN INVENTORY</h2>
+<div class="grid">
+<div class="card"><div class="label">AUTHORIZED SSID</div><div>Shubh</div></div>
+<div class="card"><div class="label">DEVICE IP</div><div>172.22.25.69</div></div>
+<div class="card"><div class="label">TARGET</div><div>172.22.25.0/24</div></div>
+<div class="card"><div class="label">ADDITIONAL HOST</div><div>172.22.25.133</div></div>
+</div>
+<div class="terminal">
+<div class="termbar">authorized-lan.sh</div>
+<div class="termout"><span class="promptline">$ ./wifi-authorized-lan.sh LAB-001</span>
 
-<section id="methodology" class="dark">
+AUTHORIZED LAN INVENTORY
+SSID      : Shubh
+Device IP : 172.22.25.69
+Target    : 172.22.25.0/24
 
-  <p class="eyebrow">WORKFLOW</p>
-
-  <h2>Assessment methodology</h2>
-
-  <div class="flow">
-    <span>AUTHORIZATION</span>
-    <i>→</i>
-
-    <span>SCOPE</span>
-    <i>→</i>
-
-    <span>DISCOVERY</span>
-    <i>→</i>
-
-    <span>CLASSIFY</span>
-    <i>→</i>
-
-    <span>VERIFY</span>
-    <i>→</i>
-
-    <span>EVIDENCE</span>
-    <i>→</i>
-
-    <span>REPORT</span>
-  </div>
-
-  <p class="muted">
-    The workflow intentionally stops at the authorization boundary.
-    Active testing is performed only when the written scope explicitly
-    permits it.
-  </p>
-
+HOSTS OBSERVED
+172.22.25.69
+172.22.25.133</div>
+</div>
 </section>
 
+<section id="services">
+<h2>03 // SERVICE ASSESSMENT</h2>
+<div class="card">
+<h3>172.22.25.133 : TCP/53</h3>
+<p><span class="badge">OPEN</span> <span class="badge">DNS</span> <span class="badge">dnsmasq 2.51</span></p>
+<p>Service identification was performed with Nmap and TCP connectivity was independently verified with Ncat.</p>
+</div>
+<div class="terminal">
+<div class="termbar">nmap · service inventory</div>
+<div class="termout"><span class="promptline">$ nmap -n -sT -sV --version-light --open -p 53 172.22.25.133</span>
+
+PORT   STATE SERVICE REASON  VERSION
+53/tcp open  domain  syn-ack dnsmasq 2.51
+
+$ nc -vz -w 3 172.22.25.133 53
+Connected to 172.22.25.133:53</div>
+</div>
+</section>
 
 <section id="evidence">
+<h2>04 // EVIDENCE & VALIDATION</h2>
+<div class="grid">
+<div class="card"><div class="metric">61</div><div class="label">PYTEST PASS</div></div>
+<div class="card"><div class="metric">PASS</div><div class="label">PYTHON COMPILE</div></div>
+<div class="card"><div class="metric">PASS</div><div class="label">SHELL SYNTAX</div></div>
+<div class="card"><div class="metric">JSON/XML/TXT</div><div class="label">EVIDENCE FORMATS</div></div>
+</div>
 
-  <p class="eyebrow">ENGINEERING EVIDENCE</p>
+<div class="terminal">
+<div class="termbar">validation checkpoint</div>
+<div class="termout"><span class="promptline">$ python -m pytest -q</span>
+.............................................................
+61 passed
 
-  <h2>Current validation</h2>
+<span class="promptline">$ python -m py_compile assessment/*.py</span>
+PYTHON COMPILE: PASS
 
-  <div class="metrics">
+<span class="promptline">$ bash -n wifi-assess.sh wifi-authorized.sh wifi-authorized-lan.sh</span>
+SHELL VALIDATION: PASS</div>
+</div>
 
-    <div>
-      <strong>12</strong>
-      <span>automated tests passing</span>
-    </div>
-
-    <div>
-      <strong>2</strong>
-      <span>structured evidence formats</span>
-    </div>
-
-    <div>
-      <strong>2.4 / 5</strong>
-      <span>GHz classification</span>
-    </div>
-
-    <div>
-      <strong>0</strong>
-      <span>credential attacks</span>
-    </div>
-
-  </div>
-
-  <p>
-    Validation commands:
-  </p>
-
-  <pre><code>python -m pytest -q
-bash -n wifi_scan.sh
-python -m py_compile wifi_scan.py</code></pre>
-
+<details><summary>Evidence model</summary>
+<div>Wireless discovery, connection telemetry, LAN host discovery, service inventory and reporting are separate layers. Automated tests are not presented as live network evidence.</div>
+</details>
 </section>
 
+<section id="architecture">
+<h2>05 // ARCHITECTURE</h2>
+<div class="terminal">
+<div class="termout">Android Wi-Fi subsystem
+        │
+        ▼
+    Termux:API
+        │
+        ├── Wi-Fi discovery
+        └── Connection telemetry
+        │
+        ▼
+Authorized assessment scope
+        │
+        ├── LAN host discovery
+        └── TCP service inventory
+        │
+        ▼
+Evidence
+        │
+        ├── JSON
+        ├── XML
+        └── TXT
+        │
+        ▼
+Assessment reporting</div>
+</div>
+</section>
 
 <section>
-
-  <p class="eyebrow">REAL-WORLD STANDARD</p>
-
-  <h2>Safe operation is part of the skill</h2>
-
-  <p class="lead">
-    A strong assessment is not measured by how many networks can be
-    marked "authorized." It is measured by whether the assessor can
-    establish scope, preserve evidence, recognize boundaries, and stop
-    when authorization does not exist.
-  </p>
-
+<h2>06 // PLATFORM REALITY</h2>
+<div class="card">
+<p><span class="warn">⚠ CURRENT ANDROID CONDITION</span></p>
+<p>Android/Termux can restrict low-level networking interfaces. During testing,
+<code>ip route</code>, <code>ip neigh</code> and some <code>/proc/net</code>
+interfaces returned permission errors.</p>
+<p>Termux:API Wi-Fi scanning also requires Android Location to be enabled.
+When unavailable, the project records the limitation instead of inventing results.</p>
+</div>
 </section>
 
-</main>
+<section id="roadmap">
+<h2>07 // ENGINEERING ROADMAP</h2>
+<div class="timeline">
+<div class="event"><b>✓ Phase 1</b><br>Real Wi-Fi discovery</div>
+<div class="event"><b>✓ Phase 2</b><br>Connection telemetry</div>
+<div class="event"><b>✓ Phase 3</b><br>Authorized LAN inventory</div>
+<div class="event"><b>✓ Phase 4</b><br>TCP service/version inventory</div>
+<div class="event"><b>✓ Phase 5</b><br>Evidence + regression testing</div>
+<div class="event"><b>→ Phase 6</b><br>Assessment dashboard + stronger reporting</div>
+<div class="event"><b>→ Phase 7</b><br>Detection, risk scoring and remediation workflows</div>
+</div>
+</section>
 
+<section>
+<h2>08 // DOCUMENTATION</h2>
+<div class="grid">
+<a class="card" href="wiki/Home.md">Home<br><span class="label">Project overview</span></a>
+<a class="card" href="wiki/Status.md">Status<br><span class="label">LAB-001 state</span></a>
+<a class="card" href="wiki/Architecture.md">Architecture<br><span class="label">System design</span></a>
+<a class="card" href="wiki/Methodology.md">Methodology<br><span class="label">Assessment flow</span></a>
+<a class="card" href="wiki/WiFi-Discovery.md">Wi-Fi Discovery<br><span class="label">Wireless layer</span></a>
+<a class="card" href="wiki/LAN-Inventory.md">LAN Inventory<br><span class="label">Host discovery</span></a>
+<a class="card" href="wiki/Service-Assessment.md">Services<br><span class="label">Service inventory</span></a>
+<a class="card" href="wiki/Evidence.md">Evidence<br><span class="label">Artifacts</span></a>
+<a class="card" href="wiki/Testing.md">Testing<br><span class="label">Validation</span></a>
+<a class="card" href="wiki/Android-Termux-Limitations.md">Limitations<br><span class="label">Platform reality</span></a>
+<a class="card" href="wiki/Roadmap.md">Roadmap<br><span class="label">Next engineering stages</span></a>
+</div>
+</section>
+
+<section>
+<h2>09 // TERMUX QUICK ACTIONS</h2>
+<div id="commands"></div>
+</section>
 
 <footer>
-
-  <span>
-    DrConfluence • Wi-Fi Security Assessment Lab
-  </span>
-
-  <a href="https://github.com/DrConfluence">
-    GitHub
-  </a>
-
+Wi-Fi Security Audit Lab · LAB-001 · Android / Termux ·
+<a href="https://github.com/DrConfluence/wifi-security-audit-lab">GitHub Repository</a>
+<br><br>
+Authorized assessment only. Wireless visibility is not authorization.
 </footer>
+</main>
 
+<script>
+const commands=[
+"cd ~/wifi-audit && termux-wifi-connectioninfo | jq .",
+"cd ~/wifi-audit && termux-wifi-scaninfo | jq .",
+"cd ~/wifi-audit && python -m pytest -q",
+"cd ~/wifi-audit && ./wifi-authorized-lan.sh LAB-001"
+];
+const box=document.getElementById("commands");
+commands.forEach((cmd,i)=>{
+ const div=document.createElement("div");
+ div.className="terminal";
+ div.innerHTML='<div class="termbar">command '+(i+1)+'</div><div class="termout command"><code>'+cmd.replaceAll("&","&amp;").replaceAll("<","&lt;")+'</code><button>copy</button></div>';
+ div.querySelector("button").onclick=async()=>{
+   await navigator.clipboard.writeText(cmd);
+   div.querySelector("button").textContent="copied";
+   setTimeout(()=>div.querySelector("button").textContent="copy",1200);
+ };
+ box.appendChild(div);
+});
+</script>
 </body>
 </html>
