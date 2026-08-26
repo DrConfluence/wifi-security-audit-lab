@@ -14,3 +14,6 @@ __pycache__/
 *.pyc
 
 authorized_networks.txt
+
+# Local assessment evidence
+evidence/
