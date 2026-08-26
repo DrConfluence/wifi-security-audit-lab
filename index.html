@@ -343,6 +343,9 @@ Authorized assessment only. Wireless visibility is not authorization.
 <div class="p67-card"><div class="p67-label">Hosts</div><div class="p67-value" id="p67hosts">—</div></div>
 <div class="p67-card"><div class="p67-label">Services</div><div class="p67-value" id="p67services">—</div></div>
 <div class="p67-card"><div class="p67-label">APs observed</div><div class="p67-value" id="p67aps">—</div></div>
+<div class="p67-card"><div class="p67-label">Open networks</div><div class="p67-value" id="p67open">—</div></div>
+<div class="p67-card"><div class="p67-label">Secured networks</div><div class="p67-value" id="p67secured">—</div></div>
+<div class="p67-card"><div class="p67-label">WPS advertised</div><div class="p67-value" id="p67wps">—</div></div>
 </div>
 
 <div class="p67-tabs">
@@ -419,6 +422,24 @@ async function loadPhase6(){
   document.getElementById("p67hosts").textContent=a.hosts_observed??0;
   document.getElementById("p67services").textContent=sv.services_observed??0;
   document.getElementById("p67aps").textContent=w.networks_observed??0;
+
+  // Derive wireless assessment metrics from normalized scan results.
+  const networks = Array.isArray(w.networks) ? w.networks : [];
+  const openNetworks = networks.filter(x =>
+    String(x.security || "").toUpperCase().startsWith("OPEN")
+  );
+  const securedNetworks = networks.filter(x =>
+    !String(x.security || "").toUpperCase().startsWith("OPEN")
+  );
+  const wpsNetworks = networks.filter(x => x.wps_advertised === true);
+
+  const openEl = document.getElementById("p67open");
+  const securedEl = document.getElementById("p67secured");
+  const wpsEl = document.getElementById("p67wps");
+
+  if(openEl) openEl.textContent = openNetworks.length;
+  if(securedEl) securedEl.textContent = securedNetworks.length;
+  if(wpsEl) wpsEl.textContent = wpsNetworks.length;
 
   const telemetryAvailable =
     d.network_status !== "telemetry_unavailable" &&
