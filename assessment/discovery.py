@@ -168,18 +168,20 @@ def write_evidence(result):
         exist_ok=True,
     )
 
-    path = EVIDENCE_DIR / "wifi_discovery.json"
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    timestamped_path = EVIDENCE_DIR / f"wifi_discovery_{stamp}.json"
+    latest_path = EVIDENCE_DIR / "wifi_discovery.json"
 
-    path.write_text(
-        json.dumps(
-            result,
-            indent=2,
-            ensure_ascii=False,
-        ),
-        encoding="utf-8",
+    content = json.dumps(
+        result,
+        indent=2,
+        ensure_ascii=False,
     )
+    from assessment.evidence import write_collision_safe
+    written_path = write_collision_safe(timestamped_path, content)
+    latest_path.write_text(content, encoding="utf-8")
 
-    return path
+    return written_path
 
 
 def print_table(result):

@@ -1,17 +1,23 @@
-#!/data/data/com.termux/files/usr/bin/bash
-set -u
+#!/usr/bin/env bash
+set -euo pipefail
 
-cd "$HOME/wifi-audit" || exit 1
+cd "$(dirname "$0")" || exit 1
+
+if [ $# -lt 1 ] || [ -z "$1" ]; then
+    echo "ERROR: Explicit authorization reference is required." >&2
+    echo "Usage: ./wifi-live.sh <AUTHORIZATION_REF>" >&2
+    exit 2
+fi
 
 echo "===== LIVE WIFI INVENTORY ====="
 echo
 
-python -m assessment.live_inventory \
-    --authorization-ref "${1:-AUTHORIZED-LAB}" 
+python3 -m assessment.live_inventory \
+    --authorization-ref "$1"
 
 echo
 echo "===== TESTS ====="
-python -m pytest -q
+python3 -m pytest -q
 
 echo
 echo "===== STATUS ====="

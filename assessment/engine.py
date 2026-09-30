@@ -46,6 +46,11 @@ def start_assessment(
 
 
 def run_phase1(session):
+    if not is_in_scope(session):
+        raise PermissionError(
+            "Phase 1 target is outside the recorded authorization scope"
+        )
+
     return collect_connectivity_evidence(
         assessment_id=session["assessment_id"],
         ssid=session["ssid"],

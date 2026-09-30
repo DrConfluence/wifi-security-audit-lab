@@ -3,6 +3,7 @@
 import json
 import shutil
 import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -131,8 +132,9 @@ def ping(host):
             "reason": "No gateway available",
         }
 
+    timeout_arg = ["-W", "2000"] if sys.platform == "darwin" else ["-W", "2"]
     r = command(
-        ["ping", "-c", "2", "-W", "2", host]
+        ["ping", "-c", "2"] + timeout_arg + [host]
     )
 
     return {
@@ -259,7 +261,13 @@ def main():
         )
 
     print("\n[4] GATEWAY VALIDATION")
-    gateway_result = ping(gw)
+    if state == "NOT_CONNECTED":
+        gateway_result = {
+            "status": "NOT_TESTED",
+            "reason": "Target is not connected",
+        }
+    else:
+        gateway_result = ping(gw)
     print(
         "Status:",
         gateway_result["status"]
@@ -292,21 +300,21 @@ def main():
         "overall_state": overall,
     }
 
-    path = (
-        EVIDENCE
-        / "live_assessment.json"
-    )
+    EVIDENCE.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    timestamped_path = EVIDENCE / f"live_assessment_{stamp}.json"
+    path = EVIDENCE / "live_assessment.json"
 
-    path.write_text(
-        json.dumps(
-            evidence,
-            indent=2,
-            ensure_ascii=False,
-        ),
-        encoding="utf-8",
+    content = json.dumps(
+        evidence,
+        indent=2,
+        ensure_ascii=False,
     )
+    from assessment.evidence import write_collision_safe
+    written_path = write_collision_safe(timestamped_path, content)
+    path.write_text(content, encoding="utf-8")
 
-    print("\nEvidence:", path)
+    print("\nEvidence:", written_path)
     print("=" * 68)
 
 

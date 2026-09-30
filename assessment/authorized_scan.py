@@ -33,6 +33,13 @@ def run(cmd, timeout=90):
             "stderr": e.stderr or "",
             "timed_out": True,
         }
+    except FileNotFoundError as e:
+        return {
+            "returncode": 127,
+            "stdout": "",
+            "stderr": f"Tool '{cmd[0]}' not found: {e}",
+            "timed_out": False,
+        }
 
 def wifi():
     r = run(["termux-wifi-connectioninfo"], 10)
@@ -151,6 +158,15 @@ def main():
     print(f"Target        : {target}")
     print("=" * 68)
 
+    from assessment.session import validate_scope
+    valid, reason = validate_scope(
+        ssid=ssid,
+        bssid=bssid,
+        authorization_ref=args.authorization_ref,
+    )
+    if not valid:
+        raise SystemExit(f"ERROR: Authorization verification failed: {reason}")
+
     # ------------------------------------------------------------
     # HOST DISCOVERY
     # ------------------------------------------------------------
@@ -266,12 +282,17 @@ def main():
         ],
     }
 
-    out = EVIDENCE / f"{args.authorization_ref}_real_assessment.json"
-    out.write_text(json.dumps(report, indent=2) + "\n")
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    timestamped_out = EVIDENCE / f"{args.authorization_ref}_real_assessment_{stamp}.json"
+    latest_out = EVIDENCE / f"{args.authorization_ref}_real_assessment.json"
+    content = json.dumps(report, indent=2) + "\n"
+    from assessment.evidence import write_collision_safe
+    written_out = write_collision_safe(timestamped_out, content)
+    latest_out.write_text(content, encoding="utf-8")
 
     print("\n[3] EVIDENCE")
     print("-" * 68)
-    print(f"JSON : {out}")
+    print(f"JSON : {written_out}")
     print(f"XML  : {host_xml}")
 
     if service_xml.exists():
