@@ -54,3 +54,21 @@ def test_service_verified():
         item["id"] == "SVC-80"
         for item in findings
     )
+
+
+def test_gateway_failed():
+    findings = generate_findings(
+        {
+            "connection_state": "DHCP_ACQUIRED",
+            "gateway_test": {
+                "status": "FAIL",
+            },
+        },
+        [],
+    )
+
+    finding = next((item for item in findings if item["id"] == "NET-003"), None)
+    assert finding is not None
+    assert finding["status"] == "FAIL"
+    assert finding["severity"] == "WARNING"
+    assert finding["title"] == "Default gateway unreachable"

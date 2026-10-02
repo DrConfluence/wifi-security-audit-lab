@@ -468,3 +468,63 @@ def test_connectivity_check_gateway_ping_args_linux(monkeypatch):
     conn_mod.check_gateway("192.168.1.1", count=2)
     assert len(captured_commands) == 1
     assert captured_commands[0] == ["ping", "-c", "2", "-W", "2", "192.168.1.1"]
+
+
+def test_scope_validation_mismatched_bssid_fails_closed():
+    # LAB-NET is authorized for BSSID 02:00:00:00:00:01 with ref LAB-001.
+    # An access point with different BSSID cannot inherit authorization.
+    valid, reason = validate_scope(
+        ssid="LAB-NET",
+        bssid="02:00:00:00:00:99",
+        authorization_ref="LAB-001",
+    )
+    assert valid is False
+    assert "Mismatched BSSID" in reason or "not authorized" in reason
+
+
+def test_scope_validation_spoofed_ssid_different_bssid_rejected():
+    # Rogue AP broadcasting an authorized SSID but with rogue BSSID
+    valid, reason = validate_scope(
+        ssid="LAB-NETWORK",
+        bssid="de:ad:be:ef:00:01",
+        authorization_ref="EXAMPLE-001",
+    )
+    assert valid is False
+    assert "Mismatched BSSID" in reason or "not authorized" in reason
+
+
+def test_scope_validation_bssid_with_wrong_ssid_rejected():
+    # Correct BSSID 02:00:00:00:00:01 but mismatched SSID
+    valid, reason = validate_scope(
+        ssid="ROGUE-SSID",
+        bssid="02:00:00:00:00:01",
+        authorization_ref="LAB-001",
+    )
+    assert valid is False
+    assert "does not match authorized SSID" in reason
+
+
+def test_probe_fail_closed_on_mismatched_bssid(monkeypatch):
+    # Verify that live inventory active probe blocks when connected to mismatched BSSID
+    module = live_inv_mod
+
+    monkeypatch.setattr(module, "wifi_connection", lambda: {
+        "available": True,
+        "data": {
+            "ssid": "LAB-NET",
+            "bssid": "02:00:00:00:00:99",  # Mismatched BSSID
+            "ip": "172.22.25.69",
+        },
+    })
+    monkeypatch.setattr(module, "wifi_scan", lambda: {"available": False, "data": []})
+
+    probes_executed = []
+    monkeypatch.setattr(module, "discover_lan", lambda ip: probes_executed.append("discover_lan"))
+
+    result = module.run_live(
+        authorization_ref="LAB-001",
+    )
+    assert result["overall_state"] == "BLOCKED_UNAUTHORIZED"
+    assert result["authorized"] is False
+    assert "Authorization validation failed" in result["reason"]
+    assert len(probes_executed) == 0

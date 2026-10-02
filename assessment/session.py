@@ -86,16 +86,36 @@ def validate_scope(ssid, bssid=None, authorization_ref=None, auth_file=None):
         return False, "Authorization scope file not found or contains no records"
 
     bssid_key = (bssid or "").strip().lower()
-    if bssid_key and bssid_key in auths:
-        entries = auths[bssid_key]
-        if any(e["authorization_ref"].lower() == cleaned_ref.lower() for e in entries):
-            return True, "Authorized by BSSID match"
-        return False, f"Authorization reference '{cleaned_ref}' does not match record for BSSID {bssid}"
-
     ssid_key = (ssid or "").strip().lower()
+
+    if bssid_key:
+        if bssid_key in auths:
+            entries = auths[bssid_key]
+            matching = [
+                e for e in entries
+                if e["authorization_ref"].lower() == cleaned_ref.lower()
+            ]
+            if matching:
+                if ssid_key and not any(
+                    e["ssid"].strip().lower() == ssid_key
+                    for e in matching
+                    if e.get("ssid")
+                ):
+                    return False, f"Target SSID '{ssid}' does not match authorized SSID for BSSID {bssid}"
+                return True, "Authorized by BSSID match"
+            return False, f"Authorization reference '{cleaned_ref}' does not match record for BSSID {bssid}"
+        else:
+            if ssid_key and ssid_key in auths:
+                return False, f"Mismatched BSSID '{bssid}': target BSSID is not authorized for SSID '{ssid}'"
+            return False, f"Target BSSID '{bssid}' is not in recorded authorization scope"
+
     if ssid_key and ssid_key in auths:
         entries = auths[ssid_key]
-        if any(e["authorization_ref"].lower() == cleaned_ref.lower() for e in entries):
+        matching = [
+            e for e in entries
+            if e["authorization_ref"].lower() == cleaned_ref.lower()
+        ]
+        if matching:
             return True, "Authorized by SSID match"
         return False, f"Authorization reference '{cleaned_ref}' does not match record for SSID {ssid}"
 
