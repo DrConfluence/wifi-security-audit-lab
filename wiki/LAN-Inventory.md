@@ -4,7 +4,7 @@ When connected to an authorized Wi-Fi network, the assessment can derive the loc
 
 ## LAB-001 observed state
 
-- SSID: Shubh
+- SSID: LAB-NET
 - Device IP: 172.22.25.69
 - Target: 172.22.25.0/24
 - Hosts observed: 2
