@@ -6,6 +6,7 @@ import re
 import shutil
 import socket
 import subprocess
+import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -180,8 +181,15 @@ def subnet_from_ip(ip):
 
 
 def ping_host(host, timeout=1):
+    if sys.platform == "darwin":
+        waittime_ms = str(max(100, int(float(timeout) * 1000)))
+        args = ["ping", "-c", "1", "-W", waittime_ms, str(host)]
+    else:
+        timeout_s = str(max(1, int(round(float(timeout)))))
+        args = ["ping", "-c", "1", "-W", timeout_s, str(host)]
+
     result = run(
-        ["ping", "-c", "1", "-W", str(timeout), str(host)],
+        args,
         timeout=3,
     )
 
@@ -375,6 +383,18 @@ def run_live(authorization_ref):
 
     data = connection["data"]
 
+    from assessment.session import validate_scope
+    valid, reason = validate_scope(
+        ssid=data.get("ssid"),
+        bssid=data.get("bssid"),
+        authorization_ref=authorization_ref,
+    )
+    if not valid:
+        result["overall_state"] = "BLOCKED_UNAUTHORIZED"
+        result["reason"] = f"Authorization validation failed: {reason}"
+        result["authorized"] = False
+        return result
+
     result["client"] = {
         "ssid": data.get("ssid"),
         "bssid": data.get("bssid"),
@@ -422,16 +442,13 @@ def save(result):
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     path = EVIDENCE / f"live_inventory_{stamp}.json"
 
-    path.write_text(
-        json.dumps(
-            result,
-            indent=2,
-            ensure_ascii=False,
-        ),
-        encoding="utf-8",
+    content = json.dumps(
+        result,
+        indent=2,
+        ensure_ascii=False,
     )
-
-    return path
+    from assessment.evidence import write_collision_safe
+    return write_collision_safe(path, content)
 
 
 def main():

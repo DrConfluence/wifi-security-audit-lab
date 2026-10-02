@@ -11,8 +11,8 @@
     "networks_observed": 13,
     "networks": [
       {
-        "ssid": "Sandip107.",
-        "bssid": "f6:4c:ed:dc:84:c6",
+        "ssid": "DEMO-WIFI-01",
+        "bssid": "02:00:00:00:00:01",
         "rssi": -98,
         "frequency_mhz": 2462,
         "band": "2.4 GHz",
@@ -24,8 +24,8 @@
         "timestamp": 688605441040
       },
       {
-        "ssid": "182VISHALJIO5.0",
-        "bssid": "3e:f8:7e:5c:7d:8b",
+        "ssid": "DEMO-WIFI-02",
+        "bssid": "02:00:00:00:00:02",
         "rssi": -91,
         "frequency_mhz": 2462,
         "band": "2.4 GHz",
@@ -37,8 +37,8 @@
         "timestamp": 688605440997
       },
       {
-        "ssid": "DeshpandeVaibhav",
-        "bssid": "fe:bf:77:25:4d:3f",
+        "ssid": "DEMO-WIFI-03",
+        "bssid": "02:00:00:00:00:03",
         "rssi": -98,
         "frequency_mhz": 2462,
         "band": "2.4 GHz",
@@ -50,8 +50,8 @@
         "timestamp": 688577210954
       },
       {
-        "ssid": "Desai",
-        "bssid": "7e:b0:de:5a:92:e6",
+        "ssid": "DEMO-WIFI-04",
+        "bssid": "02:00:00:00:00:04",
         "rssi": -98,
         "frequency_mhz": 2462,
         "band": "2.4 GHz",
@@ -63,8 +63,8 @@
         "timestamp": 688605441024
       },
       {
-        "ssid": "LIVSMT-RO-FF64",
-        "bssid": "36:b7:da:e2:ff:64",
+        "ssid": "DEMO-WIFI-05",
+        "bssid": "02:00:00:00:00:05",
         "rssi": -76,
         "frequency_mhz": 2412,
         "band": "2.4 GHz",
@@ -76,8 +76,8 @@
         "timestamp": 688577210976
       },
       {
-        "ssid": "Airtel_akas_6001",
-        "bssid": "c4:9a:31:5e:8c:de",
+        "ssid": "DEMO-WIFI-06",
+        "bssid": "02:00:00:00:00:06",
         "rssi": -96,
         "frequency_mhz": 2432,
         "band": "2.4 GHz",
@@ -89,8 +89,8 @@
         "timestamp": 688605441048
       },
       {
-        "ssid": "JioAirfiberA6",
-        "bssid": "20:b5:c6:04:38:64",
+        "ssid": "DEMO-WIFI-07",
+        "bssid": "02:00:00:00:00:07",
         "rssi": -96,
         "frequency_mhz": 5500,
         "band": "5 GHz",
@@ -102,8 +102,8 @@
         "timestamp": 688577211022
       },
       {
-        "ssid": "OmkarChaitu",
-        "bssid": "84:d8:1b:75:45:06",
+        "ssid": "DEMO-WIFI-08",
+        "bssid": "02:00:00:00:00:08",
         "rssi": -97,
         "frequency_mhz": 2457,
         "band": "2.4 GHz",
@@ -115,8 +115,8 @@
         "timestamp": 688577210920
       },
       {
-        "ssid": "MV113961515",
-        "bssid": "bc:ad:ae:22:67:1d",
+        "ssid": "DEMO-WIFI-09",
+        "bssid": "02:00:00:00:00:09",
         "rssi": -96,
         "frequency_mhz": 2437,
         "band": "2.4 GHz",
@@ -128,8 +128,8 @@
         "timestamp": 688577211007
       },
       {
-        "ssid": "Redmi 9 Power",
-        "bssid": "02:7b:e5:48:60:91",
+        "ssid": "DEMO-HOTSPOT-10",
+        "bssid": "02:00:00:00:00:0a",
         "rssi": -92,
         "frequency_mhz": 2412,
         "band": "2.4 GHz",
@@ -141,8 +141,8 @@
         "timestamp": 688577210993
       },
       {
-        "ssid": "W00_1875495768",
-        "bssid": "4c:01:14:c3:85:7f",
+        "ssid": "DEMO-WIFI-11",
+        "bssid": "02:00:00:00:00:0b",
         "rssi": -98,
         "frequency_mhz": 2462,
         "band": "2.4 GHz",
@@ -154,8 +154,8 @@
         "timestamp": 688605441057
       },
       {
-        "ssid": "RH-2.4G-DDF7D0",
-        "bssid": "44:95:3b:dd:f7:d0",
+        "ssid": "DEMO-WIFI-12",
+        "bssid": "02:00:00:00:00:0c",
         "rssi": -86,
         "frequency_mhz": 2412,
         "band": "2.4 GHz",
@@ -167,8 +167,8 @@
         "timestamp": 688605441031
       },
       {
-        "ssid": "MULTIPOINT@4.11",
-        "bssid": "78:9a:18:8f:50:42",
+        "ssid": "DEMO-WIFI-13",
+        "bssid": "02:00:00:00:00:0d",
         "rssi": -92,
         "frequency_mhz": 5300,
         "band": "5 GHz",

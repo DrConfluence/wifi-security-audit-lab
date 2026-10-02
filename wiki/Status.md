@@ -15,7 +15,7 @@
 | TCP service inventory | Validated |
 | Service/version identification | Validated |
 | Evidence generation | Validated |
-| Automated tests | 61 passing |
+| Automated tests | 110 passing |
 | Python compilation | Passing |
 | Shell syntax checks | Passing |
 
@@ -25,8 +25,8 @@ The real assessment previously observed 13 Wi-Fi networks.
 
 During an authorized LAN assessment, the device was observed as:
 
-- SSID: `Shubh`
-- BSSID: `32:93:58:39:45:b7`
+- SSID: `LAB-NET`
+- BSSID: `02:00:00:00:00:01`
 - IPv4: `172.22.25.69`
 - LAN target: `172.22.25.0/24`
 

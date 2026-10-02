@@ -17,7 +17,7 @@ Wi-Fi discovery and authorized LAN inventory.
 - TCP/53 reachable
 - `dnsmasq 2.51` identified on TCP/53
 - JSON/XML/TXT evidence artifacts
-- 61 automated tests passing
+- 110 automated tests passing
 
 ### Current Android state
 

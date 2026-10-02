@@ -3,6 +3,7 @@
 import json
 import shutil
 import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -149,8 +150,9 @@ def check_gateway(gateway, count=3):
             "reason": "No default gateway identified",
         }
 
+    timeout_arg = ["-W", "2000"] if sys.platform == "darwin" else ["-W", "2"]
     result = run_command(
-        ["ping", "-c", str(count), "-W", "2", gateway]
+        ["ping", "-c", str(count)] + timeout_arg + [gateway]
     )
 
     return {
@@ -203,8 +205,23 @@ def collect_connectivity_evidence(
         "interface_info": interface_info,
         "routes": routes,
         "gateway": gateway,
-        "gateway_test": check_gateway(gateway),
     }
+
+    from assessment.session import validate_scope
+    scope_valid, scope_reason = validate_scope(
+        ssid=ssid,
+        bssid=bssid,
+        authorization_ref=authorization_ref,
+    )
+    if not scope_valid:
+        evidence["gateway_test"] = {
+            "target": gateway,
+            "reachable": False,
+            "status": "NOT_TESTED",
+            "reason": f"Authorization verification failed: {scope_reason}",
+        }
+    else:
+        evidence["gateway_test"] = check_gateway(gateway)
 
     EVIDENCE_DIR.mkdir(
         parents=True,
@@ -216,7 +233,9 @@ def collect_connectivity_evidence(
         / f"{assessment_id}_connectivity.json"
     )
 
-    output.write_text(
+    from assessment.evidence import write_collision_safe
+    write_collision_safe(
+        output,
         json.dumps(evidence, indent=2),
         encoding="utf-8",
     )

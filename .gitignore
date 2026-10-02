@@ -12,6 +12,7 @@ authorized_networks.csv
 __pycache__/
 .pytest_cache/
 *.pyc
+.venv/
 
 authorized_networks.txt
 

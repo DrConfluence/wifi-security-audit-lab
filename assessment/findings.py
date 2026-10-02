@@ -43,6 +43,15 @@ def generate_findings(connectivity, services):
             "status": "NOT_TESTED",
         })
 
+    elif gateway_status == "FAIL":
+        findings.append({
+            "id": "NET-003",
+            "severity": "WARNING",
+            "title": "Default gateway unreachable",
+            "description": "The configured default gateway did not respond to connectivity validation probes.",
+            "status": "FAIL",
+        })
+
     for item in services:
         if item.get("status") == "PASS":
             findings.append({

@@ -135,6 +135,15 @@ def main():
     print(f"LAN scope     : {network}")
     print("=" * 70)
 
+    from assessment.session import validate_scope
+    valid, reason = validate_scope(
+        ssid=connection.get("ssid"),
+        bssid=connection.get("bssid"),
+        authorization_ref=args.authorization_ref,
+    )
+    if not valid:
+        raise SystemExit(f"ERROR: Authorization verification failed: {reason}")
+
     print("\n[1] REAL AP DISCOVERY")
     scan = wifi_scan()
 
@@ -178,15 +187,17 @@ def main():
     }
 
     EVIDENCE.mkdir(exist_ok=True)
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    timestamped_path = EVIDENCE / f"authorized_lan_inventory_{stamp}.json"
     path = EVIDENCE / "authorized_lan_inventory.json"
 
-    path.write_text(
-        json.dumps(evidence, indent=2, ensure_ascii=False),
-        encoding="utf-8",
-    )
+    content = json.dumps(evidence, indent=2, ensure_ascii=False)
+    from assessment.evidence import write_collision_safe
+    written_path = write_collision_safe(timestamped_path, content)
+    path.write_text(content, encoding="utf-8")
 
     print("\n[3] EVIDENCE")
-    print(path)
+    print(written_path)
 
 if __name__ == "__main__":
     main()

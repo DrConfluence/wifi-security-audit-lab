@@ -416,18 +416,20 @@ def save_evidence(data):
         exist_ok=True,
     )
 
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    timestamped_path = EVIDENCE / f"live_authorized_assessment_{stamp}.json"
     path = EVIDENCE / "live_authorized_assessment.json"
 
-    path.write_text(
-        json.dumps(
-            data,
-            indent=2,
-            ensure_ascii=False,
-        ),
-        encoding="utf-8",
+    content = json.dumps(
+        data,
+        indent=2,
+        ensure_ascii=False,
     )
+    from assessment.evidence import write_collision_safe
+    written_path = write_collision_safe(timestamped_path, content)
+    path.write_text(content, encoding="utf-8")
 
-    return path
+    return written_path
 
 
 def print_discovery(scan):
@@ -570,7 +572,20 @@ def main():
         or routes.get("default_gateway")
     )
 
-    if not association["associated"]:
+    from assessment.session import validate_scope
+    scope_valid, scope_reason = validate_scope(
+        ssid=args.ssid,
+        bssid=association.get("bssid"),
+        authorization_ref=args.authorization_ref,
+    )
+
+    if not scope_valid:
+        services = {
+            "status": "NOT_TESTED",
+            "reason": f"Authorization verification failed: {scope_reason}",
+            "results": [],
+        }
+    elif not association["associated"]:
         services = {
             "status": "NOT_TESTED",
             "reason": (

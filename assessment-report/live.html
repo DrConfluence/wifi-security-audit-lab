@@ -116,16 +116,31 @@ if(evidence){
 
       const services=data.services || c.services || [];
       const body=document.getElementById("services");
-      body.innerHTML="";
+      body.textContent="";
 
       if(!services.length){
-        body.innerHTML="<tr><td colspan='3'>No Phase-2 data supplied</td></tr>";
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 3;
+        td.textContent = "No Phase-2 data supplied";
+        tr.appendChild(td);
+        body.appendChild(tr);
       }else{
         services.forEach(x=>{
-          body.innerHTML +=
-            `<tr><td>${x.service||"UNKNOWN"}</td>`+
-            `<td>${x.port||"—"}</td>`+
-            `<td><span class="badge">${x.status||"UNKNOWN"}</span></td></tr>`;
+          const tr = document.createElement("tr");
+          const tdService = document.createElement("td");
+          tdService.textContent = x.service || "UNKNOWN";
+          const tdPort = document.createElement("td");
+          tdPort.textContent = x.port !== undefined && x.port !== null ? x.port : "—";
+          const tdStatus = document.createElement("td");
+          const span = document.createElement("span");
+          span.className = "badge";
+          span.textContent = x.status || "UNKNOWN";
+          tdStatus.appendChild(span);
+          tr.appendChild(tdService);
+          tr.appendChild(tdPort);
+          tr.appendChild(tdStatus);
+          body.appendChild(tr);
         });
       }
     })

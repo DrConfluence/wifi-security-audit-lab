@@ -2,21 +2,21 @@
 
 ## Automated tests
 
-Run: python -m pytest -q
+Run: `python -m pytest -v`
 
-Current validated result: 61 passed
+Current validated result: 110 passed
 
 ## Python compilation
 
-Run: python -m py_compile assessment/*.py
+Run: `python -m compileall -q .`
 
 Current result: PYTHON COMPILE: PASS
 
 ## Shell validation
 
-Run: bash -n wifi-assess.sh; bash -n wifi-authorized.sh; bash -n wifi-authorized-lan.sh
+Run: `for f in *.sh; do bash -n "$f"; done`
 
-All three scripts passed syntax validation.
+All repository shell scripts pass syntax validation.
 
 ## Real-device validation
 

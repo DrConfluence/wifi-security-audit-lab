@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 
 set -euo pipefail
 
@@ -10,9 +10,11 @@ echo "========================================"
 echo "Directory: $SCRIPT_DIR"
 echo
 
-python "$SCRIPT_DIR/wifi_scan.py"
+python3 "$SCRIPT_DIR/wifi_scan.py" "$@"
 
-echo
-echo "Latest observations:"
-tail -n 5 "$SCRIPT_DIR/networks_log.csv"
+if [ -f "$SCRIPT_DIR/networks_log.csv" ]; then
+    echo
+    echo "Latest observations:"
+    tail -n 5 "$SCRIPT_DIR/networks_log.csv"
+fi
 
