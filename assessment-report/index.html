@@ -288,9 +288,11 @@ function statusClass(value){
   return "warn";
 }
 
-function badge(value){
-  const cls = statusClass(value);
-  return `<span class="badge ${cls}">${value || "UNKNOWN"}</span>`;
+function createBadge(value){
+  const span = document.createElement("span");
+  span.className = `badge ${statusClass(value)}`;
+  span.textContent = value || "UNKNOWN";
+  return span;
 }
 
 if(source){
@@ -326,39 +328,59 @@ fetch(source)
   const serviceBody =
     document.getElementById("services");
 
-  serviceBody.innerHTML = "";
+  serviceBody.textContent = "";
 
   if(!services.length){
-    serviceBody.innerHTML =
-      "<tr><td colspan='3'>No Phase-2 data</td></tr>";
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 3;
+    td.textContent = "No Phase-2 data";
+    tr.appendChild(td);
+    serviceBody.appendChild(tr);
   }else{
     services.forEach(item => {
-      serviceBody.innerHTML +=
-        "<tr>" +
-        "<td>" + (item.service || "UNKNOWN") + "</td>" +
-        "<td>" + (item.port || "—") + "</td>" +
-        "<td>" + badge(item.status) + "</td>" +
-        "</tr>";
+      const tr = document.createElement("tr");
+      const tdService = document.createElement("td");
+      tdService.textContent = item.service || "UNKNOWN";
+      const tdPort = document.createElement("td");
+      tdPort.textContent = item.port !== undefined && item.port !== null ? item.port : "—";
+      const tdStatus = document.createElement("td");
+      tdStatus.appendChild(createBadge(item.status));
+      tr.appendChild(tdService);
+      tr.appendChild(tdPort);
+      tr.appendChild(tdStatus);
+      serviceBody.appendChild(tr);
     });
   }
 
   const findingsBody =
     document.getElementById("findings");
 
-  findingsBody.innerHTML = "";
+  findingsBody.textContent = "";
 
   if(!findings.length){
-    findingsBody.innerHTML =
-      "<tr><td colspan='4'>No findings</td></tr>";
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 4;
+    td.textContent = "No findings";
+    tr.appendChild(td);
+    findingsBody.appendChild(tr);
   }else{
     findings.forEach(item => {
-      findingsBody.innerHTML +=
-        "<tr>" +
-        "<td>" + item.id + "</td>" +
-        "<td>" + item.severity + "</td>" +
-        "<td>" + item.title + "</td>" +
-        "<td>" + badge(item.status) + "</td>" +
-        "</tr>";
+      const tr = document.createElement("tr");
+      const tdId = document.createElement("td");
+      tdId.textContent = item.id || "—";
+      const tdSeverity = document.createElement("td");
+      tdSeverity.textContent = item.severity || "—";
+      const tdTitle = document.createElement("td");
+      tdTitle.textContent = item.title || "—";
+      const tdStatus = document.createElement("td");
+      tdStatus.appendChild(createBadge(item.status));
+      tr.appendChild(tdId);
+      tr.appendChild(tdSeverity);
+      tr.appendChild(tdTitle);
+      tr.appendChild(tdStatus);
+      findingsBody.appendChild(tr);
     });
   }
 
